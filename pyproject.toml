@@ -10,6 +10,7 @@ packages = [{ include = "mosamaticdesktop" }]
 [tool.poetry.dependencies]
 python = "3.11.0"
 pyside6 = "6.9.1"
+mosamatic-cli = "1.5.1"
 
 [tool.poetry.scripts]
 mosamaticdesktop = "mosamaticdesktop.main:app"
