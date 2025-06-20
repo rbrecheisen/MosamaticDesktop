@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "mosamaticdesktop"
+version = "1.0.0"
+description = "A PySide6 desktop app for body composition analysis from DICOM CT scans"
+authors = ["Ralph Brecheisen <ralph.brecheisen@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{ include = "mosamaticdesktop" }]
+
+[tool.poetry.dependencies]
+python = "3.11.0"
+pyside6 = "6.9.1"
+
+[tool.poetry.scripts]
+mosamaticdesktop = "mosamaticdesktop.main:app"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.1"
+
+[tool.pytest.ini_options]
+addopts = "-s"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
