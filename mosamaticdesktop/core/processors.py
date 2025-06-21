@@ -18,9 +18,6 @@ class DecompressDicomFilesProcessor:
     def output_dir(self):
         return self._output_dir
     
-    def overwrite(self):
-        return self._overwrite
-    
     def directory_from_files(self, files):
         parents = {os.path.dirname(f) for f in files}
         if len(parents) != 1:
