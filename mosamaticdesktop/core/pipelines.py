@@ -2,7 +2,12 @@ import os
 
 from mosamaticdesktop.core.logging import LogManager
 from mosamaticdesktop.core.utils import directory_from_files
-from mosamatic.tasks import DecompressDicomFilesTask
+from mosamatic.tasks import (
+    DecompressDicomFilesTask,
+    RescaleDicomFilesTask,
+    SegmentMuscleFatL3Task,
+    CalculateScoresTask,
+)
 
 LOG = LogManager()
 
