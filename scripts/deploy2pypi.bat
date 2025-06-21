@@ -27,6 +27,8 @@ if /I NOT "%CONFIRM%"=="y" (
     exit /b 1
 )
 
+echo %VERSION% > mosamaticdesktop\resources\VERSION
+
 set /p TOKEN=<"G:\My Drive\data\ApiKeysAndPasswordFiles\pypi-token.txt"
 
 poetry build

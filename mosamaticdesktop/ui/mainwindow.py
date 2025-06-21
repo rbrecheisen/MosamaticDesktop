@@ -12,25 +12,29 @@ from PySide6.QtCore import Qt, QByteArray
 import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.ui.settings import Settings
-from mosamaticdesktop.ui.utils import resource_path
+from mosamaticdesktop.ui.panels.mainpanel import MainPanel
+from mosamaticdesktop.ui.utils import resource_path, version
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-        self._settings = Settings()
+        self._settings = None
         self.init_window()
 
     def init_window(self):
-        self.setWindowTitle('Mosamatic Desktop')
+        self.setWindowTitle(f'{constants.MOSAMATIC_DESKTOP_WINDOW_TITLE} {version()}')
         self.setWindowIcon(QIcon(resource_path(os.path.join(
             constants.MOSAMATIC_DESKTOP_RESOURCES_IMAGES_ICONS_DIR, constants.MOSAMATIC_DESKTOP_RESOURCES_ICON))))
         if not self.load_geometry_and_state():
             self.set_default_size_and_position()
+        self.setCentralWidget(MainPanel())
 
     # GETTERS
 
     def settings(self):
+        if not self._settings:
+            self._settings = Settings()
         return self._settings
 
     # EVENTS
