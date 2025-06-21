@@ -2,6 +2,7 @@ import os
 import shutil
 
 from mosamaticdesktop.core.logging import LogManager
+from mosamaticdesktop.core.utils import directory_from_files
 from mosamatic.tasks import DecompressDicomFilesTask
 
 LOG = LogManager()
@@ -12,23 +13,21 @@ class DecompressDicomFilesProcessor:
         self._files = files
         self._output_dir = output_dir
 
+    # GETTERS
+
     def files(self):
         return self._files
     
     def output_dir(self):
         return self._output_dir
-    
-    def directory_from_files(self, files):
-        parents = {os.path.dirname(f) for f in files}
-        if len(parents) != 1:
-            raise RuntimeError(f'Files do not share same parent directory: {parents}')
-        return parents.pop()
+        
+    # EXCECUTION
     
     def execute(self):
         if os.path.exists(self.output_dir()):
             shutil.rmtree(self.output_dir())
         task = DecompressDicomFilesTask(
-            input=self.directory_from_files(self.files()),
+            input=directory_from_files(self.files()),
             output=self.output_dir(),
             params=None,
             overwrite=True,

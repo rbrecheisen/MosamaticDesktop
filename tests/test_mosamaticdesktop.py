@@ -1,7 +1,7 @@
 from tests.sources import get_sources
 from mosamatic.utils import is_dicom
-from mosamaticdesktop.core.load import DicomFileLoader
-from mosamaticdesktop.core.processors import DecompressDicomFilesProcessor
+from mosamaticdesktop.core.loaders import DicomFileLoader
+from mosamaticdesktop.core.pipelines import DefaultPipeline
 
 SOURCES = get_sources()
 
@@ -13,7 +13,7 @@ def test_mosamaticdesktop():
     for f in files:
         assert is_dicom(f)
 
-    decompressor = DecompressDicomFilesProcessor(files, SOURCES['output']['DecompressDicomFilesTask'])
-    files = decompressor.execute()
+    pipeline = DefaultPipeline(files, SOURCES['output']['DefaultPipeline'])
+    files = pipeline.execute()
     for f in files:
         assert is_dicom(f)

@@ -10,6 +10,7 @@ SOURCES = {
             'SegmentMuscleFatL3Task': '/Users/ralph/Desktop/downloads/Mosamatic/CLI/MuscleFatSegmentationL3Task',
             'CalculateScoresTask': '/Users/ralph/Desktop/downloads/Mosamatic/CLI/CalculateScoresTask',
             'CreatePngsFromSegmentationsTask': '/Users/ralph/Desktop/downloads/Mosamatic/CLI/CreatePngsFromSegmentationsTask',
+            'DefaultPipeline': '/Users/ralph/Desktop/downloads/Mosamatic/CLI/DefaultPipeline',
         }
     },
     'windows': {
@@ -21,6 +22,7 @@ SOURCES = {
             'SegmentMuscleFatL3Task': 'D:\\Mosamatic\\CLI\\Output\\MuscleFatSegmentationL3Task',
             'CalculateScoresTask': 'D:\\Mosamatic\\CLI\\Output\\CalculateScoresTask',
             'CreatePngsFromSegmentationsTask': 'D:\\Mosamatic\\CLI\\Output\\CreatePngsFromSegmentationsTask',
+            'DefaultPipeline': 'D:\\Mosamatic\\CLI\\Output\\DefaultPipeline',
         }
     }
 }

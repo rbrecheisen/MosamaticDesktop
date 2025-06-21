@@ -2,6 +2,6 @@
 
 setlocal
 
-poetry run pytest
+poetry run pytest -p no:warnings
 
 endlocal
