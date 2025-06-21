@@ -200,14 +200,14 @@ files = [
 
 [[package]]
 name = "mosamatic-cli"
-version = "1.5.4"
+version = "1.5.5"
 description = "A CLI tool for body composition analysis from DICOM CT scans"
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
-    {file = "mosamatic_cli-1.5.4-py3-none-any.whl", hash = "sha256:419f627e3993d880226904d506b1c3810080dcac61b6e799267a9c580bb9b0a7"},
-    {file = "mosamatic_cli-1.5.4.tar.gz", hash = "sha256:96d30c1b1657b9b786e238da733b2d45493c551b1c724727b0eb8dedcdfb1146"},
+    {file = "mosamatic_cli-1.5.5-py3-none-any.whl", hash = "sha256:6a9ca8f9a29205e42405fc47cb89eb50e0829531eda4cdacd8f2f5213f4c8da6"},
+    {file = "mosamatic_cli-1.5.5.tar.gz", hash = "sha256:58785dbae9d35349dd9225b6669306fff3eb9079a4fa63ddee1e606b52b79849"},
 ]
 
 [package.dependencies]

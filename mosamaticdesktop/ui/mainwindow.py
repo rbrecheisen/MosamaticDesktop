@@ -37,13 +37,13 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.main_panel())
 
     def init_menus(self):
-        file_menu_exit_action = QAction(icon(self, constants.MOSAMATIC_DESKTOP_ICON_EXIT), 'Exit', self)
-        file_menu_exit_action.triggered.connect(self.close)
         file_menu_open_settings_action = QAction(icon(self, constants.MOSAMATIC_DESKTOP_ICON_SETTINGS), 'Settings...', self)
         file_menu_open_settings_action.triggered.connect(self.handle_open_settings)
+        file_menu_exit_action = QAction(icon(self, constants.MOSAMATIC_DESKTOP_ICON_EXIT), 'Exit', self)
+        file_menu_exit_action.triggered.connect(self.close)
         file_menu = self.menuBar().addMenu('File')
-        file_menu.addAction(file_menu_exit_action)
         file_menu.addAction(file_menu_open_settings_action)
+        file_menu.addAction(file_menu_exit_action)
 
     def init_status_bar(self):
         self.statusBar().showMessage('Ready')
@@ -57,8 +57,13 @@ class MainWindow(QMainWindow):
     
     def main_panel(self):
         if not self._main_panel:
-            self._main_panel = MainPanel()
+            self._main_panel = MainPanel(self)
         return self._main_panel
+
+    # SETTERS
+
+    def set_status(self, message):
+        self.statusBar().showMessage(message)
 
     # EVENT HANDLERS
 
@@ -68,7 +73,7 @@ class MainWindow(QMainWindow):
     def closeEvent(self, event):
         self.save_geometry_and_state()
         return super().closeEvent(event)
-
+    
     # MISCELLANEOUS
 
     def load_geometry_and_state(self):
