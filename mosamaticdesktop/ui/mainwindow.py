@@ -1,9 +1,8 @@
 import os
 
 from PySide6.QtWidgets import (
-    QApplication,
-    QStyle,
     QMainWindow,
+    QMenuBar,
 )
 from PySide6.QtGui import (
     QGuiApplication,
@@ -16,7 +15,7 @@ import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.ui.settings import Settings
 from mosamaticdesktop.ui.panels.mainpanel import MainPanel
-from mosamaticdesktop.ui.utils import resource_path, version, icon
+from mosamaticdesktop.ui.utils import resource_path, version, icon, is_macos
 
 
 class MainWindow(QMainWindow):
@@ -44,6 +43,8 @@ class MainWindow(QMainWindow):
         file_menu = self.menuBar().addMenu('File')
         file_menu.addAction(file_menu_open_settings_action)
         file_menu.addAction(file_menu_exit_action)
+        if is_macos():            
+            self.menuBar().setNativeMenuBar(False)
 
     def init_status_bar(self):
         self.statusBar().showMessage('Ready')

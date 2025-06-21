@@ -10,8 +10,9 @@ from mosamaticdesktop.ui.mainwindow import MainWindow
 def app():
     settings = Settings()
     application_name = settings.get(constants.MOSAMATIC_DESKTOP_WINDOW_TITLE)
-    QtWidgets.QApplication.setApplicationName(application_name)
+    # QtWidgets.QApplication.setApplicationName(application_name)
     app = QtWidgets.QApplication(sys.argv)
+    app.setApplicationName(application_name)
     main_window = MainWindow()
     main_window.show()
     sys.exit(app.exec())
