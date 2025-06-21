@@ -200,28 +200,28 @@ files = [
 
 [[package]]
 name = "mosamatic-cli"
-version = "1.5.1"
+version = "1.5.3"
 description = "A CLI tool for body composition analysis from DICOM CT scans"
 optional = false
-python-versions = "==3.11.0"
+python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
-    {file = "mosamatic_cli-1.5.1-py3-none-any.whl", hash = "sha256:7a5649025cf3f763bde48bb4d8917b6c1a2d029a27d8b4ad535e08d9ad205877"},
-    {file = "mosamatic_cli-1.5.1.tar.gz", hash = "sha256:5af6ee4bd8609a2d22ad4ad5a4915e8d0e521c341cefcc124bb701dff5849115"},
+    {file = "mosamatic_cli-1.5.3-py3-none-any.whl", hash = "sha256:1d76fedf2148121ba28a5a555c7fcd686fe0f8461d449b3a1419656fabdc95c2"},
+    {file = "mosamatic_cli-1.5.3.tar.gz", hash = "sha256:944d555ec75b8edce5280c05ca3740199075be85cd7ef97a3c594b9b9717b38a"},
 ]
 
 [package.dependencies]
 click = "<8.1.8"
-numpy = "2.3.0"
-openpyxl = "3.1.5"
-pandas = "2.3.0"
-pendulum = "3.1.0"
-pillow = "11.2.1"
-pydicom = "3.0.1"
-python-gdcm = "3.0.25"
-scipy = "1.15.3"
-torch = "2.7.1"
-torchvision = "0.22.1"
+numpy = "*"
+openpyxl = ">=3.1,<4.0"
+pandas = ">=2.3,<3.0"
+pendulum = ">=3.1,<4.0"
+pillow = ">=11.0,<12.0"
+pydicom = "*"
+python-gdcm = ">=3.0,<4.0"
+scipy = ">=1.1,<2.0"
+torch = ">=2.7,<3.0"
+torchvision = ">=0.22,<0.23"
 
 [[package]]
 name = "mpmath"
@@ -625,7 +625,10 @@ files = [
 ]
 
 [package.dependencies]
-numpy = {version = ">=1.23.2", markers = "python_version == \"3.11\""}
+numpy = [
+    {version = ">=1.23.2", markers = "python_version == \"3.11\""},
+    {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
+]
 python-dateutil = ">=2.8.2"
 pytz = ">=2020.1"
 tzdata = ">=2022.7"
@@ -1116,7 +1119,7 @@ description = "Easily download, build, install, upgrade, and uninstall Python pa
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
-markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""
+markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\" or python_version >= \"3.12\""
 files = [
     {file = "setuptools-80.9.0-py3-none-any.whl", hash = "sha256:062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922"},
     {file = "setuptools-80.9.0.tar.gz", hash = "sha256:f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c"},
@@ -1229,6 +1232,7 @@ nvidia-cusparselt-cu12 = {version = "0.6.3", markers = "platform_system == \"Lin
 nvidia-nccl-cu12 = {version = "2.26.2", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
 nvidia-nvjitlink-cu12 = {version = "12.6.85", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
 nvidia-nvtx-cu12 = {version = "12.6.77", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+setuptools = {version = "*", markers = "python_version >= \"3.12\""}
 sympy = ">=1.13.3"
 triton = {version = "3.3.1", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
 typing-extensions = ">=4.10.0"
@@ -1331,5 +1335,5 @@ files = [
 
 [metadata]
 lock-version = "2.1"
-python-versions = "3.11.0"
-content-hash = "b8800b086014f03b76e6e245e535908fbaa50b3ca28e70d73c06dbfb82d8eb8b"
+python-versions = ">=3.11,<3.14"
+content-hash = "319c2f4c75f49d1d5ad2a0dfab70c1a3b1c072bd8ed98d25b230ea41b5cb82d8"

@@ -27,7 +27,7 @@ if /I NOT "%CONFIRM%"=="y" (
     exit /b 1
 )
 
-set /p TOKEN=<C:\Users\r.brecheisen\pypi-token.txt
+set /p TOKEN=<"G:\My Drive\data\ApiKeysAndPasswordFiles\pypi-token.txt"
 
 poetry build
 poetry publish --username __token__ --password %TOKEN%
