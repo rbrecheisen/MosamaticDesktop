@@ -1,3 +1,5 @@
+import os
+
 from PySide6.QtWidgets import (
     QWidget,
     QPushButton,
@@ -6,12 +8,20 @@ from PySide6.QtWidgets import (
     QFileDialog,
 )
 
+import mosamaticdesktop.ui.constants as constants
+
+from mosamaticdesktop.ui.settings import Settings
 from mosamaticdesktop.ui.panels.logpanel import LogPanel
+from mosamaticdesktop.core.logging import LogManager
+from mosamaticdesktop.core.load import DicomFileLoader
+
+LOG = LogManager()
 
 
 class MainPanel(QWidget):
     def __init__(self):
         super(MainPanel, self).__init__()
+        self._settings = None
         self._directory_label = None
         self._log_panel = None
         self.init_panel()
@@ -27,6 +37,11 @@ class MainPanel(QWidget):
 
     # GETTERS
 
+    def settings(self):
+        if not self._settings:
+            self._settings = Settings()
+        return self._settings
+
     def directory_label(self):
         if not self._directory_label:
             self._directory_label = QLabel()
@@ -40,8 +55,15 @@ class MainPanel(QWidget):
     # EVENT HANDLERS
 
     def handle_open_directory(self):
-        directory = QFileDialog.getExistingDirectory()
+        last_directory = self.settings().get(constants.MOSAMATIC_DESKTOP_LAST_DIRECTORY_KEY)
+        directory = QFileDialog.getExistingDirectory(dir=last_directory)
         if directory:
-            # Load images using core, instead of UI
+            self.log_panel().add_line(LOG.info(f'Loading directory {directory}...'))
+            loader = DicomFileLoader(directory)
+            files = loader.load()
+            for f in files:
+                self.log_panel().add_line(LOG.info(f))
+            if len(files) == 0:
+                self.log_panel().add_line(LOG.info('No images found'))
             self.directory_label().setText(directory)
-            self.log_panel().add_line(f'Loading images from {directory}')
+            self.settings().set(constants.MOSAMATIC_DESKTOP_LAST_DIRECTORY_KEY, directory)
