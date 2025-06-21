@@ -1,17 +1,17 @@
 import sys
 
 SOURCES = {
-    # 'mac': {
-    #     'input': '/Users/ralph/Desktop/downloads/pancreasdemo',
-    #     'model_files': '/Users/ralph/Desktop/downloads/pytorchmodelfiles/2.2',
-    #     'output': {
-    #         'DecompressDicomFilesTask': '/Users/ralph/Desktop/downloads/Mosamatic/CLI/DecompressDicomFilesTask',
-    #         'RescaleDicomFilesTask': '/Users/ralph/Desktop/downloads/Mosamatic/CLI/RescaleDicomFilesTask',
-    #         'SegmentMuscleFatL3Task': '/Users/ralph/Desktop/downloads/Mosamatic/CLI/MuscleFatSegmentationL3Task',
-    #         'CalculateScoresTask': '/Users/ralph/Desktop/downloads/Mosamatic/CLI/CalculateScoresTask',
-    #         'CreatePngsFromSegmentationsTask': '/Users/ralph/Desktop/downloads/Mosamatic/CLI/CreatePngsFromSegmentationsTask',
-    #     }
-    # },
+    'mac': {
+        'input': '/Users/ralph/Library/CloudStorage/GoogleDrive-ralph.brecheisen@gmail.com/My Drive/data/Mosamatic/testdata/L3',
+        'model_files': '/Users/ralph/Library/CloudStorage/GoogleDrive-ralph.brecheisen@gmail.com/My Drive/data/Mosamatic/models/pytorch/2.2/L3',
+        'output': {
+            'DecompressDicomFilesTask': '/Users/ralph/Desktop/downloads/Mosamatic/CLI/DecompressDicomFilesTask',
+            'RescaleDicomFilesTask': '/Users/ralph/Desktop/downloads/Mosamatic/CLI/RescaleDicomFilesTask',
+            'SegmentMuscleFatL3Task': '/Users/ralph/Desktop/downloads/Mosamatic/CLI/MuscleFatSegmentationL3Task',
+            'CalculateScoresTask': '/Users/ralph/Desktop/downloads/Mosamatic/CLI/CalculateScoresTask',
+            'CreatePngsFromSegmentationsTask': '/Users/ralph/Desktop/downloads/Mosamatic/CLI/CreatePngsFromSegmentationsTask',
+        }
+    },
     'windows': {
         'input': 'G:\\My Drive\\data\\Mosamatic\\testdata\\L3',
         'model_files': 'G:\\My Drive\\data\\Mosamatic\\models\\pytorch\\2.2\\L3',
