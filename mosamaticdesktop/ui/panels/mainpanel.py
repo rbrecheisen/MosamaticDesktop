@@ -42,5 +42,6 @@ class MainPanel(QWidget):
     def handle_open_directory(self):
         directory = QFileDialog.getExistingDirectory()
         if directory:
+            # Load images using core, instead of UI
             self.directory_label().setText(directory)
             self.log_panel().add_line(f'Loading images from {directory}')

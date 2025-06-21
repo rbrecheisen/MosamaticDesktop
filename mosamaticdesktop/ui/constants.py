@@ -1,3 +1,5 @@
+from PySide6.QtWidgets import QStyle
+
 from mosamaticdesktop.ui.utils import is_macos
 
 
@@ -14,3 +16,7 @@ MOSAMATIC_DESKTOP_RESOURCES_DIR = 'mosamaticdesktop/resources'
 MOSAMATIC_DESKTOP_RESOURCES_IMAGES_DIR = 'mosamaticdesktop/resources/images'
 MOSAMATIC_DESKTOP_RESOURCES_IMAGES_ICONS_DIR = 'mosamaticdesktop/resources/images/icons'
 MOSAMATIC_DESKTOP_RESOURCES_ICON = 'mosamaticdesktop.icns' if is_macos() else 'mosamaticdesktop.ico'
+
+# https://www.pythonguis.com/faq/built-in-qicons-pyqt/#qt-standard-icons
+MOSAMATIC_DESKTOP_ICON_EXIT = QStyle.SP_MessageBoxCritical
+MOSAMATIC_DESKTOP_ICON_SETTINGS = QStyle.SP_VistaShield

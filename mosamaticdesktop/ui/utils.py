@@ -14,3 +14,7 @@ def version():
 
 def is_macos():
     return sys.platform.startswith('darwin')
+
+
+def icon(parent, icon_type):
+    return parent.style().standardIcon(icon_type)

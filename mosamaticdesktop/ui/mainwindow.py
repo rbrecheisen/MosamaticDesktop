@@ -1,10 +1,13 @@
 import os
 
 from PySide6.QtWidgets import (
+    QApplication,
+    QStyle,
     QMainWindow,
 )
 from PySide6.QtGui import (
     QGuiApplication,
+    QAction,
     QIcon,
 )
 from PySide6.QtCore import Qt, QByteArray
@@ -13,13 +16,14 @@ import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.ui.settings import Settings
 from mosamaticdesktop.ui.panels.mainpanel import MainPanel
-from mosamaticdesktop.ui.utils import resource_path, version
+from mosamaticdesktop.ui.utils import resource_path, version, icon
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self._settings = None
+        self._main_panel = None
         self.init_window()
 
     def init_window(self):
@@ -28,7 +32,21 @@ class MainWindow(QMainWindow):
             constants.MOSAMATIC_DESKTOP_RESOURCES_IMAGES_ICONS_DIR, constants.MOSAMATIC_DESKTOP_RESOURCES_ICON))))
         if not self.load_geometry_and_state():
             self.set_default_size_and_position()
-        self.setCentralWidget(MainPanel())
+        self.init_menus()
+        self.init_status_bar()
+        self.setCentralWidget(self.main_panel())
+
+    def init_menus(self):
+        file_menu_exit_action = QAction(icon(self, constants.MOSAMATIC_DESKTOP_ICON_EXIT), 'Exit', self)
+        file_menu_exit_action.triggered.connect(self.close)
+        file_menu_open_settings_action = QAction(icon(self, constants.MOSAMATIC_DESKTOP_ICON_SETTINGS), 'Settings...', self)
+        file_menu_open_settings_action.triggered.connect(self.handle_open_settings)
+        file_menu = self.menuBar().addMenu('File')
+        file_menu.addAction(file_menu_exit_action)
+        file_menu.addAction(file_menu_open_settings_action)
+
+    def init_status_bar(self):
+        self.statusBar().showMessage('Ready')
 
     # GETTERS
 
@@ -36,8 +54,16 @@ class MainWindow(QMainWindow):
         if not self._settings:
             self._settings = Settings()
         return self._settings
+    
+    def main_panel(self):
+        if not self._main_panel:
+            self._main_panel = MainPanel()
+        return self._main_panel
 
-    # EVENTS
+    # EVENT HANDLERS
+
+    def handle_open_settings(self):
+        pass
 
     def closeEvent(self, event):
         self.save_geometry_and_state()
