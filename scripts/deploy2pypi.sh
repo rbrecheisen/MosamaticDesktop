@@ -26,7 +26,9 @@ if [ ! "${CONFIRM}" == "y" ]; then
     exit 1
 fi
 
-TOKEN=$(cat /Users/ralph/pypi-token.txt)
+echo ${VERSION} > mosamaticdesktop/resources/VERSION
+
+TOKEN=$(cat /Users/ralph/Library/CloudStorage/GoogleDrive-ralph.brecheisen@gmail.com/My Drive/data/ApiKeysAndPasswordFiles/pypi-token.txt)
 
 poetry build
 poetry publish --username __token__ --password ${TOKEN}
