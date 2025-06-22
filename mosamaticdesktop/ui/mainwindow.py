@@ -2,7 +2,6 @@ import os
 
 from PySide6.QtWidgets import (
     QMainWindow,
-    QMenuBar,
 )
 from PySide6.QtGui import (
     QGuiApplication,
@@ -36,9 +35,9 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.main_panel())
 
     def init_menus(self):
-        file_menu_open_settings_action = QAction(icon(self, constants.MOSAMATIC_DESKTOP_ICON_SETTINGS), 'Settings...', self)
+        file_menu_open_settings_action = QAction(icon(self, constants.MOSAMATIC_DESKTOP_ICON_SETTINGS), 'settings...', self)
         file_menu_open_settings_action.triggered.connect(self.handle_open_settings)
-        file_menu_exit_action = QAction(icon(self, constants.MOSAMATIC_DESKTOP_ICON_EXIT), 'Exit', self)
+        file_menu_exit_action = QAction(icon(self, constants.MOSAMATIC_DESKTOP_ICON_EXIT), 'exit', self)
         file_menu_exit_action.triggered.connect(self.close)
         file_menu = self.menuBar().addMenu('File')
         file_menu.addAction(file_menu_open_settings_action)
@@ -47,7 +46,7 @@ class MainWindow(QMainWindow):
             self.menuBar().setNativeMenuBar(False)
 
     def init_status_bar(self):
-        self.statusBar().showMessage('Ready')
+        self.statusBar().showMessage('ready')
 
     # GETTERS
 

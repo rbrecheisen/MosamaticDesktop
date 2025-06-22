@@ -8,7 +8,8 @@ class LogManager:
 
     def _log(self, level, message):
         timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        message = f'[{timestamp}] {level} {self._name}: {message}'
+        # message = f'[{timestamp}] {level} {self._name}: {message}'
+        message = f'[{timestamp}] {level} : {message}'
         if not self._suppress_print:
             print(message)
         return message
