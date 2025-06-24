@@ -38,8 +38,8 @@ class MainPanel(QWidget):
         layout = QVBoxLayout()
         layout.addWidget(self.input_directory_button())
         layout.addWidget(self.output_directory_button())
-        layout.addWidget(self.input_directory_label())
-        layout.addWidget(self.output_directory_label())
+        # layout.addWidget(self.input_directory_label())
+        # layout.addWidget(self.output_directory_label())
         layout.addWidget(self.run_pipeline_button())
         layout.addWidget(self.log_panel())
         self.setLayout(layout)
@@ -58,7 +58,7 @@ class MainPanel(QWidget):
     
     def input_directory_button(self):
         if not self._input_directory_button:
-            self._input_directory_button = QPushButton('select input directory')
+            self._input_directory_button = QPushButton('Select input directory')
             self._input_directory_button.clicked.connect(self.handle_open_input_directory)
         return self._input_directory_button
     
@@ -82,7 +82,7 @@ class MainPanel(QWidget):
     
     def output_directory_button(self):
         if not self._output_directory_button:
-            self._output_directory_button = QPushButton('select output directory')
+            self._output_directory_button = QPushButton('Select output directory')
             self._output_directory_button.clicked.connect(self.handle_open_output_directory)
             self._output_directory_button.setEnabled(False)
         return self._output_directory_button
@@ -93,11 +93,13 @@ class MainPanel(QWidget):
     def set_output_directory(self, directory):
         self._output_directory = directory
         self.output_directory_label().setText(f'output directory: {self._output_directory}')
+        self.run_pipeline_button().setEnabled(True)
 
     def run_pipeline_button(self):
         if not self._run_pipeline_button:
-            self._run_pipeline_button = QPushButton('run pipeline')
+            self._run_pipeline_button = QPushButton('Run pipeline')
             self._run_pipeline_button.clicked.connect(self.handle_run_pipeline)
+            self._run_pipeline_button.setEnabled(False)
         return self._run_pipeline_button
     
     def log_panel(self):
@@ -111,18 +113,18 @@ class MainPanel(QWidget):
         last_directory = self.settings().get(constants.MOSAMATIC_DESKTOP_LAST_DIRECTORY_KEY)
         directory = QFileDialog.getExistingDirectory(dir=last_directory)
         if directory:
-            self.log_panel().add_line(LOG.info(f'loading input directory {directory}...'))
+            self.log_panel().add_line(LOG.info(f'Loading input directory {directory}...'))
             loader = DicomFileLoader(directory)
             files = loader.load()
             for f in files:
                 self.log_panel().add_line(LOG.info(f))
                 self.files().append(f)
             if len(self.files()) == 0:
-                message = 'no images found'
+                message = 'No images found'
                 self.log_panel().add_line(LOG.info(message))
                 self.parent().set_status(message)
             else:
-                self.parent().set_status(f'found {len(self.files())} files')
+                self.parent().set_status(f'Found {len(self.files())} files')
             self.set_input_directory(directory)
             self.settings().set(constants.MOSAMATIC_DESKTOP_LAST_DIRECTORY_KEY, directory)
 
@@ -130,14 +132,14 @@ class MainPanel(QWidget):
         last_directory = self.settings().get(constants.MOSAMATIC_DESKTOP_LAST_DIRECTORY_KEY)
         directory = QFileDialog.getExistingDirectory(dir=last_directory)
         if directory:
-            self.log_panel().add_line(LOG.info(f'setting output directory {directory}...'))
+            self.log_panel().add_line(LOG.info(f'Setting output directory {directory}...'))
             self.set_output_directory(directory)
 
     def handle_run_pipeline(self):
         if self.input_directory() and self.output_directory() and len(self.files()) > 0:
-            self.log_panel().add_line(LOG.info('running default pipeline...'))
+            self.log_panel().add_line(LOG.info('Running default pipeline...'))
             pipeline = DefaultPipeline(self.files(), self.output_directory())
             files = pipeline.execute()
             for f in files:
                 self.log_panel().add_line(LOG.info(f))
-            self.log_panel().add_line(LOG.info('ripeline finished'))
+            self.log_panel().add_line(LOG.info('Pipeline finished'))

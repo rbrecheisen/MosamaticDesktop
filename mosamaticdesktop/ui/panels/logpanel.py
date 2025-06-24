@@ -21,11 +21,11 @@ class LogPanel(QWidget):
     
     def log_panel_title_label(self):
         if not self._log_panel_title_label:
-            self._log_panel_title_label = QLabel('output log:')
+            self._log_panel_title_label = QLabel('Output log:')
         return self._log_panel_title_label
 
     def init_panel(self):
-        button = QPushButton('clear logs')
+        button = QPushButton('Clear logs')
         button.clicked.connect(self.handle_clear_logs)
         layout = QVBoxLayout()
         layout.addWidget(self.log_panel_title_label())
