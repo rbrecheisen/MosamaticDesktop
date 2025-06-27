@@ -1,8 +1,9 @@
-# Common
+# Project tools
 tomli
 tomli_w
+pytest
 
 # Application
-PySide6-Essentials~=6.8
+pyside6>=6.9
 mosamatic-cli>=1.5
 pydicom
