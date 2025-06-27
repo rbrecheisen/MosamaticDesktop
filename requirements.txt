@@ -1,0 +1,2 @@
+PySide6-Essentials~=6.8
+mosamatic-cli>=1.5

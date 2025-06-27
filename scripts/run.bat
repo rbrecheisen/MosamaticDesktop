@@ -2,9 +2,42 @@
 
 setlocal
 
-FOR /F %%v IN ('poetry version --short') DO SET VERSION=%%v
-echo %VERSION% > mosamaticdesktop\resources\VERSION
+set /p VERSION=<mosamaticdesktop\src\mosamaticdesktop\resources\VERSION
 
-poetry run mosamaticdesktop
+set START_DIR=%CD%
+
+if /I "%~1"=="" (
+
+    cd mosamaticdesktop
+    call briefcase dev
+
+) else if /I "%~1"=="--test" (
+
+    cd mosamaticdesktop
+    call pytest -s
+
+) else if /I "%~1"=="--exe" (
+
+    cd mosamaticdesktop
+    call briefcase run
+
+) else if /I "%~1"=="--build" (
+
+    rmdir /s /q mosamaticdesktop\build
+    call python scripts\python\updatetomlversion.py %VERSION%
+    call python scripts\python\updatetomlrequirements.py
+    cd mosamaticdesktop
+    call briefcase create
+    call briefcase build
+
+) else if /I "%~1"=="--package" (
+
+    cd mosamaticdesktop
+    call briefcase package --adhoc-sign
+    
+)
+
+cd %START_DIR%
+
 
 endlocal

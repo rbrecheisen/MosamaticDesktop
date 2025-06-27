@@ -1,11 +1,6 @@
 #!/bin/bash
 
-rm -rf ./.venv
-
-rm poetry.lock
-
-poetry cache clear pypi --all
-poetry update
-poetry install
-
-poetry show mosamatic-cli
+pip install --upgrade pip
+pip install -r requirements.txt
+cd mosamaticdesktop
+briefcase create
