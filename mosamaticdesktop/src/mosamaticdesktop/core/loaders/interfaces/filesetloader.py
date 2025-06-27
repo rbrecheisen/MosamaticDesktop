@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 
 
-class FileLoader(ABC):
+class FileSetLoader(ABC):
 
     @abstractmethod
-    def file_path(self):
+    def dir_path(self):
         pass
     
     @abstractmethod
-    def set_file_path(self, file_path):
+    def set_dir_path(self, dir_path):
         pass

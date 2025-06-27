@@ -1,14 +1,12 @@
-from typing import Any
-
 from abc import ABC, abstractmethod
 
 
 class Data(ABC):
 
     @abstractmethod
-    def object(self) -> Any:
+    def object(self):
         pass
 
     @abstractmethod
-    def set_object(self, object: Any) -> None:
+    def set_object(self, object) -> None:
         pass
