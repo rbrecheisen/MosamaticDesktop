@@ -8,10 +8,10 @@ def main():
     parser.add_argument('version', help='Version to use to update pyproject.toml')
     args = parser.parse_args()
 
-    with open('castoranalytics/pyproject.toml', 'rb') as f:
+    with open('mosamaticdesktop/pyproject.toml', 'rb') as f:
         data = tomli.load(f)
     data['tool']['briefcase']['version'] = args.version
-    with open('castoranalytics/pyproject.toml', 'wb') as f:
+    with open('mosamaticdesktop/pyproject.toml', 'wb') as f:
         tomli_w.dump(data, f)
     print(f'Updated pyproject.toml version to {args.version}')
 

@@ -3,9 +3,9 @@ import tomli_w
 
 
 def main():
-    with open('castoranalytics/pyproject.toml', 'rb') as f:
+    with open('mosamaticdesktop/pyproject.toml', 'rb') as f:
         data = tomli.load(f)
-    print(data['tool']['briefcase']['app']['castoranalytics'])
+    print(data['tool']['briefcase']['app']['mosamaticdesktop'])
     with open('requirements.txt', 'r') as f:
         requires = []
         start_including = False
@@ -16,8 +16,8 @@ def main():
                 continue
             if start_including:
                 requires.append(line.strip())
-        data['tool']['briefcase']['app']['castoranalytics']['requires'] = requires
-    with open('castoranalytics/pyproject.toml', 'wb') as f:
+        data['tool']['briefcase']['app']['mosamaticdesktop']['requires'] = requires
+    with open('mosamaticdesktop/pyproject.toml', 'wb') as f:
         tomli_w.dump(data, f)
 
 
