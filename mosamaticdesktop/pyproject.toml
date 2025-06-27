@@ -21,7 +21,7 @@ test_sources = [
 ]
 
 requires = [
-    "PySide6-Essentials~=6.8",
+    "pyside6>=6.9",
     "mosamatic-cli>=1.5",
 ]
 test_requires = [
