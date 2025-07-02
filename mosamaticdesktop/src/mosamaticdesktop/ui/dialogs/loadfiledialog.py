@@ -1,7 +1,6 @@
 import os
 
 from PySide6.QtWidgets import (
-    QDialog,
     QTextEdit,
     QPushButton,
     QFileDialog,
@@ -11,8 +10,6 @@ from PySide6.QtWidgets import (
 
 import mosamaticdesktop.ui.constants as constants
 
-from mosamaticdesktop.core.loaders.dicomfileloader import DicomFileLoader
-from mosamaticdesktop.core.data.datamanager import DataManager
 from mosamaticdesktop.ui.dialogs.dialog import Dialog
 from mosamaticdesktop.ui.settings import Settings
 
@@ -50,7 +47,6 @@ class LoadFileDialog(Dialog):
         return self._load_button
 
     def init_layout(self):
-        self.setWindowTitle(constants.MOSAMATICDESKTOP_LOAD_DICOM_FILE_DIALOG_WINDOW_TITLE)
         layout = QVBoxLayout()
         layout.addWidget(self.file_path_label())
         layout.addWidget(self.file_path_text_edit())
