@@ -2,7 +2,7 @@ from mosamaticdesktop.core.data.interfaces.data import Data
 from mosamaticdesktop.core.data.interfaces.filesetdata import FileSetData
 
 
-class DicomSeriesData(Data, FileSetData):
+class MultiDicomFileData(Data, FileSetData):
     def __init__(self):
         self._dir_path = None
         self._name = None

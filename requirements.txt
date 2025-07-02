@@ -1,4 +1,5 @@
 # Project tools
+briefcase
 tomli
 tomli_w
 pytest
@@ -6,4 +7,5 @@ pytest
 # Application
 pyside6>=6.9
 mosamatic-cli>=1.5
+pendulum
 pydicom

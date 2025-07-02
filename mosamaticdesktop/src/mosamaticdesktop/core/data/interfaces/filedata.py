@@ -1,7 +1,7 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 
-class FileData:
+class FileData(ABC):
 
     @abstractmethod
     def file_path(self):

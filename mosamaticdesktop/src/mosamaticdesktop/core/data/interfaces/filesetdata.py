@@ -1,7 +1,7 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 
-class FileSetData:
+class FileSetData(ABC):
 
     @abstractmethod
     def dir_path(self):

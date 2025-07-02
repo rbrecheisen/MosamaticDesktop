@@ -23,6 +23,7 @@ test_sources = [
 requires = [
     "pyside6>=6.9",
     "mosamatic-cli>=1.5",
+    "pendulum",
 ]
 test_requires = [
     "pytest",
