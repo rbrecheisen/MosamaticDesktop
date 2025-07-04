@@ -37,4 +37,4 @@ class LogManager:
 
 class LogManagerListener:
     def new_message(self, message):
-        pass
+        raise NotImplementedError()

@@ -14,6 +14,8 @@ import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.ui.settings import Settings
 from mosamaticdesktop.ui.panels.mainpanel import MainPanel
+from mosamaticdesktop.ui.panels.settingspanel import SettingsPanel
+from mosamaticdesktop.ui.panels.datapanel import DataPanel
 from mosamaticdesktop.ui.panels.logpanel import LogPanel
 from mosamaticdesktop.ui.dialogs.loaddicomfiledialog import LoadDicomFileDialog
 from mosamaticdesktop.ui.dialogs.loadmultidicomfiledialog import LoadMultiDicomFileDialog
@@ -28,6 +30,8 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         self._settings = None
         self._main_panel = None
+        self._settings_panel = None
+        self._data_panel = None
         self._log_panel = None
         self._load_dicom_file_dialog = None
         self._load_multi_dicom_file_dialog = None
@@ -53,12 +57,15 @@ class MainWindow(QMainWindow):
             self.menuBar().setNativeMenuBar(False)
 
     def init_app_menu(self):
-        app_menu_open_settings_action = QAction(constants.MOSAMATICDESKTOP_APP_MENU_OPEN_SETTINGS_ACTION_TEXT, self)
-        app_menu_open_settings_action.triggered.connect(self.handle_open_settings)
+        app_menu_open_settings_action = QAction(constants.MOSAMATICDESKTOP_APP_MENU_OPEN_SETTINGS_PANEL_ACTION_TEXT, self)
+        app_menu_open_settings_action.triggered.connect(self.handle_open_settings_panel_action)
+        app_menu_open_data_panel_action = QAction(constants.MOSAMATICDESKTOP_APP_MENU_OPEN_DATA_PANEL_ACTION_TEXT, self)
+        app_menu_open_data_panel_action.triggered.connect(self.handle_open_data_panel_action)
         app_menu_exit_action = QAction(constants.MOSAMATICDESKTOP_APP_MENU_EXIT_ACTION_TEXT, self)
         app_menu_exit_action.triggered.connect(self.close)
         app_menu = self.menuBar().addMenu(constants.MOSAMATICDESKTOP_APP_MENU_TEXT)
         app_menu.addAction(app_menu_open_settings_action)
+        app_menu.addAction(app_menu_open_data_panel_action)
         app_menu.addAction(app_menu_exit_action)
 
     def init_data_menu(self):
@@ -89,7 +96,19 @@ class MainWindow(QMainWindow):
     def main_panel(self):
         if not self._main_panel:
             self._main_panel = MainPanel(self)
+            self._main_panel.add_panel(self.data_panel(), constants.MOSAMATICDESKTOP_DATA_PANEL_NAME)
+            self._main_panel.add_panel(self.settings_panel(), constants.MOSAMATICDESKTOP_SETTINGS_PANEL_NAME)
         return self._main_panel
+    
+    def settings_panel(self):
+        if not self._settings_panel:
+            self._settings_panel = SettingsPanel()
+        return self._settings_panel
+    
+    def data_panel(self):
+        if not self._data_panel:
+            self._data_panel = DataPanel()
+        return self._data_panel
     
     def log_panel(self):
         if not self._log_panel:
@@ -120,8 +139,11 @@ class MainWindow(QMainWindow):
 
     # EVENT HANDLERS
 
-    def handle_open_settings(self):
-        pass
+    def handle_open_settings_panel_action(self):
+        self.main_panel().select_panel(constants.MOSAMATICDESKTOP_SETTINGS_PANEL_NAME)
+
+    def handle_open_data_panel_action(self):
+        self.main_panel().select_panel(constants.MOSAMATICDESKTOP_DATA_PANEL_NAME)
 
     def handle_load_dicom_file_action(self):
         self.load_dicom_file_dialog().exec()

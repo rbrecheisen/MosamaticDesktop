@@ -32,7 +32,7 @@ class MainPanel(QDockWidget):
         layout.addWidget(self.stacked_panel())
         container = QWidget()
         container.setLayout(layout)
-        self.setObjectName(constants.MOSAMATICDESKTOP_MAIN_PANEL_OBJECT_NAME)
+        self.setObjectName(constants.MOSAMATICDESKTOP_MAIN_PANEL_NAME)
         self.setWidget(container)
 
     # GETTERS
@@ -58,6 +58,14 @@ class MainPanel(QDockWidget):
         if not self._log_panel:
             self._log_panel = LogPanel()
         return self._log_panel
+    
+    # ADDING PANELS
+
+    def add_panel(self, panel, name):
+        self.stacked_panel().add_panel(panel, name)
+
+    def select_panel(self, name):
+        self.stacked_panel().switch_to(name)
 
     # EVENT HANDLERS
 

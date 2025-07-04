@@ -38,7 +38,7 @@ class LogPanel(QDockWidget, LogManagerListener):
         layout.addWidget(button)
         container = QWidget()
         container.setLayout(layout)
-        self.setObjectName(constants.MOSAMATICDESKTOP_LOG_PANEL_OBJECT_NAME)
+        self.setObjectName(constants.MOSAMATICDESKTOP_LOG_PANEL_NAME)
         self.setWidget(container)
 
     def add_line(self, line):
