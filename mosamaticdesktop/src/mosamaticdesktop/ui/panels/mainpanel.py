@@ -4,30 +4,36 @@ from PySide6.QtWidgets import (
     QWidget,
     QPushButton,
     QVBoxLayout,
+    QDockWidget,
 )
 
 import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.ui.settings import Settings
+from mosamaticdesktop.ui.panels.stackedpanel import StackedPanel
 from mosamaticdesktop.ui.panels.logpanel import LogPanel
 from mosamaticdesktop.core.logging import LogManager
 
 LOG = LogManager()
 
 
-class MainPanel(QWidget):
+class MainPanel(QDockWidget):
     def __init__(self, parent):
         super(MainPanel, self).__init__(parent)
         self._settings = None
         self._donate_button = None
+        self._stacked_panel = None
         self._log_panel = None
         self.init_panel()
 
     def init_panel(self):
         layout = QVBoxLayout()
         layout.addWidget(self.donate_button())
-        layout.addWidget(self.log_panel())
-        self.setLayout(layout)
+        layout.addWidget(self.stacked_panel())
+        container = QWidget()
+        container.setLayout(layout)
+        self.setObjectName(constants.MOSAMATICDESKTOP_MAIN_PANEL_OBJECT_NAME)
+        self.setWidget(container)
 
     # GETTERS
 
@@ -42,6 +48,11 @@ class MainPanel(QWidget):
             self._donate_button.setStyleSheet(constants.MOSAMATICDESKTOP_DONATE_BUTTON_STYLESHEET)
             self._donate_button.clicked.connect(self.handle_donate_button)
         return self._donate_button
+    
+    def stacked_panel(self):
+        if not self._stacked_panel:
+            self._stacked_panel = StackedPanel()
+        return self._stacked_panel
 
     def log_panel(self):
         if not self._log_panel:

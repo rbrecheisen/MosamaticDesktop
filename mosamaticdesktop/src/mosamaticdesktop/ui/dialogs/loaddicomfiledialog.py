@@ -2,7 +2,10 @@ import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.core.loaders.dicomfileloader import DicomFileLoader
 from mosamaticdesktop.core.data.datamanager import DataManager
+from mosamaticdesktop.core.logging import LogManager
 from mosamaticdesktop.ui.dialogs.loadfiledialog import LoadFileDialog
+
+LOG = LogManager()
 
 
 class LoadDicomFileDialog(LoadFileDialog):
@@ -17,5 +20,5 @@ class LoadDicomFileDialog(LoadFileDialog):
         if data:
             manager = DataManager()
             manager.add(data)
-            print(f'Added data "{data.name()}" to data manager')
+            LOG.info(f'Added data "{data.name()}" to data manager')
         self.close()

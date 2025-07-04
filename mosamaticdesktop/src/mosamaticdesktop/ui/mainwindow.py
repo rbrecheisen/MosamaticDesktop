@@ -1,7 +1,5 @@
 import os
 
-from typing import Any
-
 from PySide6.QtWidgets import (
     QMainWindow,
 )
@@ -16,9 +14,13 @@ import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.ui.settings import Settings
 from mosamaticdesktop.ui.panels.mainpanel import MainPanel
+from mosamaticdesktop.ui.panels.logpanel import LogPanel
 from mosamaticdesktop.ui.dialogs.loaddicomfiledialog import LoadDicomFileDialog
 from mosamaticdesktop.ui.dialogs.loadmultidicomfiledialog import LoadMultiDicomFileDialog
 from mosamaticdesktop.ui.utils import resource_path, version, is_macos
+from mosamaticdesktop.core.logging import LogManager
+
+LOG = LogManager()
 
 
 class MainWindow(QMainWindow):
@@ -26,8 +28,11 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         self._settings = None
         self._main_panel = None
+        self._log_panel = None
         self._load_dicom_file_dialog = None
         self._load_multi_dicom_file_dialog = None
+        self._load_dicom_series_dialog = None
+        self._load_multi_dicom_series_dialog = None
         self.init_window()
 
     def init_window(self):
@@ -38,7 +43,8 @@ class MainWindow(QMainWindow):
             self.set_default_size_and_position()
         self.init_menus()
         self.init_status_bar()
-        self.setCentralWidget(self.main_panel())
+        self.addDockWidget(Qt.DockWidgetArea.TopDockWidgetArea, self.main_panel())
+        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.log_panel())
 
     def init_menus(self):
         self.init_app_menu()
@@ -57,15 +63,18 @@ class MainWindow(QMainWindow):
 
     def init_data_menu(self):
         data_menu_load_dicom_file_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_DICOM_FILE_ACTION_TEXT, self)
-        data_menu_load_dicom_file_action.triggered.connect(self.handle_load_dicom_file_menu_item)
+        data_menu_load_dicom_file_action.triggered.connect(self.handle_load_dicom_file_action)
         data_menu_load_multi_dicom_file_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_MULTI_DICOM_FILE_ACTION_TEXT, self)
-        data_menu_load_multi_dicom_file_action.triggered.connect(self.handle_load_multi_dicom_file_dialog)
+        data_menu_load_multi_dicom_file_action.triggered.connect(self.handle_load_multi_dicom_action)
         data_menu_load_dicom_series_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_DICOM_SERIES_ACTION_TEXT, self)
-        data_menu_load_dicom_series_action.triggered.connect(self.handle_load_dicom_series_menu_item)
+        data_menu_load_dicom_series_action.triggered.connect(self.handle_load_dicom_series_action)
+        data_menu_load_multi_dicom_series_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_MULTI_DICOM_SERIES_ACTION_TEXT, self)
+        data_menu_load_multi_dicom_series_action.triggered.connect(self.handle_load_multi_dicom_series_menu_item)
         data_menu = self.menuBar().addMenu(constants.MOSAMATICDESKTOP_DATA_MENU_TEXT)
         data_menu.addAction(data_menu_load_dicom_file_action)
         data_menu.addAction(data_menu_load_multi_dicom_file_action)
         data_menu.addAction(data_menu_load_dicom_series_action)
+        data_menu.addAction(data_menu_load_multi_dicom_series_action)
 
     def init_status_bar(self):
         self.set_status(constants.MOSAMATICDESKTOP_STATUS_READY)
@@ -82,6 +91,12 @@ class MainWindow(QMainWindow):
             self._main_panel = MainPanel(self)
         return self._main_panel
     
+    def log_panel(self):
+        if not self._log_panel:
+            self._log_panel = LogPanel()
+            LOG.add_listener(self._log_panel)
+        return self._log_panel
+    
     def load_dicom_file_dialog(self):
         if not self._load_dicom_file_dialog:
             self._load_dicom_file_dialog = LoadDicomFileDialog()
@@ -91,6 +106,12 @@ class MainWindow(QMainWindow):
         if not self._load_multi_dicom_file_dialog:
             self._load_multi_dicom_file_dialog = LoadMultiDicomFileDialog()
         return self._load_multi_dicom_file_dialog
+    
+    def load_dicom_series_dialog(self):
+        pass
+
+    def load_multi_dicom_series_dialog(self):
+        pass
     
     # SETTERS
 
@@ -102,13 +123,16 @@ class MainWindow(QMainWindow):
     def handle_open_settings(self):
         pass
 
-    def handle_load_dicom_file_menu_item(self):
+    def handle_load_dicom_file_action(self):
         self.load_dicom_file_dialog().exec()
 
-    def handle_load_multi_dicom_file_dialog(self):
+    def handle_load_multi_dicom_action(self):
         self.load_multi_dicom_file_dialog().exec()
 
-    def handle_load_dicom_series_menu_item(self):
+    def handle_load_dicom_series_action(self):
+        pass
+
+    def handle_load_multi_dicom_series_menu_item(self):
         pass
 
     def closeEvent(self, event):

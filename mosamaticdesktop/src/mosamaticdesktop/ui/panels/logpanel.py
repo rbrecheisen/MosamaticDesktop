@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import (
     QWidget,
+    QDockWidget,
     QTextEdit,
     QPushButton,
     QVBoxLayout,
@@ -8,8 +9,10 @@ from PySide6.QtWidgets import (
 
 import mosamaticdesktop.ui.constants as constants
 
+from mosamaticdesktop.core.logging import LogManagerListener
 
-class LogPanel(QWidget):
+
+class LogPanel(QDockWidget, LogManagerListener):
     def __init__(self):
         super(LogPanel, self).__init__()
         self._log_panel_title_label = None
@@ -33,10 +36,17 @@ class LogPanel(QWidget):
         layout.addWidget(self.log_panel_title_label())
         layout.addWidget(self.log_text_edit())
         layout.addWidget(button)
-        self.setLayout(layout)
+        container = QWidget()
+        container.setLayout(layout)
+        self.setObjectName(constants.MOSAMATICDESKTOP_LOG_PANEL_OBJECT_NAME)
+        self.setWidget(container)
 
     def add_line(self, line):
         self.log_text_edit().insertPlainText(line + '\n')
 
     def handle_clear_logs(self):
         self.log_text_edit().clear()
+
+    # implements(LogManagerListener)
+    def new_message(self, message):
+        self.add_line(message)
