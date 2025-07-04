@@ -13,12 +13,15 @@ MOSAMATICDESKTOP_WINDOW_GEOMETRY_KEY = 'window/geometry'
 MOSAMATICDESKTOP_WINDOW_STATE_KEY = 'window/state'
 MOSAMATICDESKTOP_STATUS_READY = 'Ready'
 MOSAMATICDESKTOP_DONATE_URL = 'https://rbeesoft.nl/wordpress/'
-MOSAMATICDESKTOP_DONATE_BUTTON_TEXT = 'Click here if you\'d like to donate!'
+MOSAMATICDESKTOP_DONATE_BUTTON_TEXT = 'If you wish to support us, please consider a donation by clicking here!'
 MOSAMATICDESKTOP_DONATE_BUTTON_STYLESHEET = 'background-color: blue; color: white; font-weight: bold;'
 MOSAMATICDESKTOP_LAST_DIRECTORY_KEY = 'mosamaticdesktop/last_directory'
 # https://www.pythonguis.com/faq/built-in-qicons-pyqt/#qt-standard-icons
 MOSAMATICDESKTOP_ICON_EXIT = QStyle.SP_MessageBoxCritical
 MOSAMATICDESKTOP_ICON_SETTINGS = QStyle.SP_VistaShield
+MOSAMATICDESKTOP_SPLASH_SCREEN_WINDOW_W = 500
+MOSAMATICDESKTOP_SPLASH_SCREEN_WINDOW_H = 300
+MOSAMATICDESKTOP_SPLASH_SCREEN_START_APP_BUTTON_TEXT = 'Start App'
 
 # RESOURCES
 MOSAMATICDESKTOP_RESOURCES_DIR = 'mosamaticdesktop/resources'

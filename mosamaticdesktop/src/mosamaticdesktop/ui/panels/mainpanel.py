@@ -40,7 +40,7 @@ class MainPanel(QWidget):
         if not self._donate_button:
             self._donate_button = QPushButton(constants.MOSAMATICDESKTOP_DONATE_BUTTON_TEXT)
             self._donate_button.setStyleSheet(constants.MOSAMATICDESKTOP_DONATE_BUTTON_STYLESHEET)
-            self._donate_button.clicked.connect(self.handle_donate)
+            self._donate_button.clicked.connect(self.handle_donate_button)
         return self._donate_button
 
     def log_panel(self):
@@ -50,5 +50,5 @@ class MainPanel(QWidget):
 
     # EVENT HANDLERS
 
-    def handle_donate(self):
+    def handle_donate_button(self):
         webbrowser.open(constants.MOSAMATICDESKTOP_DONATE_URL)

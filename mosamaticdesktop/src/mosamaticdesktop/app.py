@@ -6,6 +6,7 @@ import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.ui.settings import Settings
 from mosamaticdesktop.ui.mainwindow import MainWindow
+from mosamaticdesktop.ui.components.splashscreen import SplashScreen
 
 
 def main():
@@ -14,8 +15,10 @@ def main():
     QtWidgets.QApplication.setApplicationName(application_name)
     app = QtWidgets.QApplication(sys.argv)
     app.setApplicationName(application_name)
-    main_window = MainWindow()
-    main_window.show()
+    # main_window = MainWindow()
+    # main_window.show()
+    splash = SplashScreen()
+    splash.show()
     sys.exit(app.exec())
 
 

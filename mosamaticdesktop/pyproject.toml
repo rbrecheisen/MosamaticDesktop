@@ -24,6 +24,12 @@ requires = [
     "pyside6>=6.9",
     "mosamatic-cli>=1.5",
     "pendulum",
+    "pydicom",
+    "numpy",
+    "pandas",
+    "openpyxl",
+    "pillow",
+    "python-gdcm",
 ]
 test_requires = [
     "pytest",
