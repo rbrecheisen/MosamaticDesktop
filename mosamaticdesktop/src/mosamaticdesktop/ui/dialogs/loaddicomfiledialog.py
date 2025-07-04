@@ -15,7 +15,7 @@ class LoadDicomFileDialog(LoadFileDialog):
 
     def handle_load_button(self):
         loader = DicomFileLoader()
-        loader.set_file_path(self.file_path_line_edit().text())
+        loader.set_path(self.file_path_line_edit().text())
         data = loader.load()
         if data:
             data.set_name(self.name_line_edit().text())
