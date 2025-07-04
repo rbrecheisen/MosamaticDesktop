@@ -1,22 +1,22 @@
 import os
 
 from mosamaticdesktop.core.loaders.interfaces.loader import Loader
-from mosamaticdesktop.core.loaders.interfaces.filesetloader import FileSetLoader
+from mosamaticdesktop.core.loaders.interfaces.fileloader import FileLoader
 from mosamaticdesktop.core.loaders.dicomfileloader import DicomFileLoader
 from mosamaticdesktop.core.data.dicomseriesdata import DicomSeriesData
 
 
-class MultiDicomSeriesLoader(Loader, FileSetLoader):
+class MultiDicomSeriesLoader(Loader, FileLoader):
     def __init__(self):
         self._dir_path = None
 
     # implements(FileSetLoader)
-    def dir_path(self):
+    def path(self):
         return self._dir_path
     
     # implements(FileSetLoader)
-    def set_dir_path(self, dir_path):
-        self._dir_path = dir_path
+    def set_path(self, path):
+        self._dir_path = path
 
     # implements(Loader)
     def load(self):

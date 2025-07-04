@@ -9,12 +9,12 @@ class DicomFileData(Data, FileData):
         self._object = None
 
     # implements(FileData)
-    def file_path(self):
+    def path(self):
         return self._file_path
     
     # implements(FileData)
-    def set_file_path(self, file_path):
-        self._file_path = file_path
+    def set_path(self, path):
+        self._file_path = path
 
     # implements(Data)
     def name(self):

@@ -22,9 +22,6 @@ class DataManager:
             return self._data[name]
         return None
     
-    def all(self):
-        return self._data.keys()
-        
     def add_listener(self, listener):
         if listener not in self._listeners:
             self._listeners.append(listener)
@@ -32,3 +29,11 @@ class DataManager:
     def notify_listeners(self, data):
         for listener in self._listeners:
             listener.new_data(data)
+
+    def save_data_to_file(self):
+        with open('data_objects.txt', 'w') as f:
+            for data in self._data.values():
+                f.write(f'{data.__class__.__name__}:{data.path()}\n')
+
+    def load_data_from_file(self):
+        pass

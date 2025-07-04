@@ -1,12 +1,6 @@
 # MosamaticDesktop
 PySide6 desktop app for running processing tasks on CT images.
 
-## Core
 
-### Loaders
-- FileLoader
-    - DicomFileLoader
-- FileSetLoader
-    - DicomSeriesLoader
-- MultiFileSetLoader
-    - MultiDicomSeriesLoader
+## To-do list
+- Save/load data objects upon app start

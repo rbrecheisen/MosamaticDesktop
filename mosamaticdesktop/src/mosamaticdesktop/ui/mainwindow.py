@@ -91,6 +91,7 @@ class MainWindow(QMainWindow):
 
     def init_data_manager(self):
         self.data_manager().add_listener(self.data_panel())
+        self.data_manager().load_data_from_file()
 
     # GETTERS
 
@@ -170,6 +171,7 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         self.save_geometry_and_state()
+        self.data_manager().save_data_to_file()
         return super().closeEvent(event)
     
     # MISCELLANEOUS

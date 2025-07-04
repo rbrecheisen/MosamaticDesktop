@@ -12,7 +12,7 @@ SOURCES = get_sources()
 
 def test_dicomfileloader():
     loader = DicomFileLoader()
-    loader.set_file_path(os.path.join(SOURCES['input'], 'SURG-ZUYD-0001.dcm'))
+    loader.set_path(os.path.join(SOURCES['input'], 'SURG-ZUYD-0001.dcm'))
     data = loader.load()
     assert isinstance(data, Data)
     assert isinstance(data, DicomFileData)
@@ -28,7 +28,7 @@ def test_dicomfileloader():
 
 def test_dicomseriesloader():
     loader = DicomSeriesLoader()
-    loader.set_dir_path(SOURCES['input']) # There's DICOM and TAG files in this directory
+    loader.set_path(SOURCES['input']) # There's DICOM and TAG files in this directory
     data = loader.load()
     assert isinstance(data, Data)
     assert isinstance(data, DicomSeriesData)

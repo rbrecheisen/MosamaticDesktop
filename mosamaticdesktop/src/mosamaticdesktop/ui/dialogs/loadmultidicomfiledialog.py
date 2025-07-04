@@ -15,7 +15,7 @@ class LoadMultiDicomFileDialog(LoadFileSetDialog):
 
     def handle_load_button(self):
         loader = MultiDicomFileLoader()
-        loader.set_dir_path(self.directory_path_line_edit().text())
+        loader.set_path(self.directory_path_line_edit().text())
         data = loader.load()
         if data:
             data.set_name(self.name_line_edit().text())

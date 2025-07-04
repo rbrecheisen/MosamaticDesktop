@@ -4,9 +4,9 @@ from abc import ABC, abstractmethod
 class FileData(ABC):
 
     @abstractmethod
-    def file_path(self):
+    def path(self):
         pass
 
     @abstractmethod
-    def set_file_path(self, file_path):
+    def set_path(self, path):
         pass

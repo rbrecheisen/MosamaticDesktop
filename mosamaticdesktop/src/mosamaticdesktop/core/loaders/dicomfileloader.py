@@ -16,23 +16,23 @@ class DicomFileLoader(Loader, FileLoader):
         self._file_path = None
 
     # implements(FileLoader)
-    def file_path(self):
+    def path(self):
         return self._file_path
     
     # implements(FileLoader)
-    def set_file_path(self, file_path):
-        self._file_path = file_path
+    def set_path(self, path):
+        self._file_path = path
 
     # implements(Loader)
     def load(self):
-        if self.file_path():
+        if self.path():
             data = DicomFileData()
-            data.set_file_path(self.file_path())
-            if is_dicom(self.file_path()):
-                p = load_dicom(self.file_path())
+            data.set_path(self.path())
+            if is_dicom(self.path()):
+                p = load_dicom(self.path())
                 if is_jpeg2000_compressed(p):
                     p.decompress()
-                data.set_object(pydicom.dcmread(self.file_path()))
+                data.set_object(pydicom.dcmread(self.path()))
                 return data
             return None
         raise RuntimeError('File path not set')
