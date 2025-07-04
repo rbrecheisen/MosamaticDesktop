@@ -1,6 +1,9 @@
 import os
 import sys
 
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QPixmap, QPainter, QColor
+
 
 def resource_path(relative_path):
     base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -18,3 +21,13 @@ def is_macos():
 
 def icon(parent, icon_type):
     return parent.style().standardIcon(icon_type)
+
+
+def set_opacity(pixmap, opacity):
+    result = QPixmap(pixmap.size())
+    result.fill(QColor(0, 0, 0, 0))
+    painter = QPainter(result)
+    painter.setOpacity(opacity)
+    painter.drawPixmap(0, 0, pixmap)
+    painter.end()
+    return result
