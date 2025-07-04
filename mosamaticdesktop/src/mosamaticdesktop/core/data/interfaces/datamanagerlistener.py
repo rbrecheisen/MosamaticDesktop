@@ -1,3 +1,3 @@
 class DataManagerListener:
-    def new_data(self):
+    def new_data(self, data):
         raise NotImplementedError()

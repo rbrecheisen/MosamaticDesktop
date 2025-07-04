@@ -21,6 +21,7 @@ from mosamaticdesktop.ui.dialogs.loaddicomfiledialog import LoadDicomFileDialog
 from mosamaticdesktop.ui.dialogs.loadmultidicomfiledialog import LoadMultiDicomFileDialog
 from mosamaticdesktop.ui.utils import resource_path, version, is_macos
 from mosamaticdesktop.core.logging import LogManager
+from mosamaticdesktop.core.data.datamanager import DataManager
 
 LOG = LogManager()
 
@@ -29,6 +30,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self._settings = None
+        self._data_manager = None
         self._main_panel = None
         self._settings_panel = None
         self._data_panel = None
@@ -38,6 +40,7 @@ class MainWindow(QMainWindow):
         self._load_dicom_series_dialog = None
         self._load_multi_dicom_series_dialog = None
         self.init_window()
+        self.init_data_manager()
 
     def init_window(self):
         self.setWindowTitle(f'{constants.MOSAMATICDESKTOP_WINDOW_TITLE} {version()}')
@@ -86,12 +89,20 @@ class MainWindow(QMainWindow):
     def init_status_bar(self):
         self.set_status(constants.MOSAMATICDESKTOP_STATUS_READY)
 
+    def init_data_manager(self):
+        self.data_manager().add_listener(self.data_panel())
+
     # GETTERS
 
     def settings(self):
         if not self._settings:
             self._settings = Settings()
         return self._settings
+    
+    def data_manager(self):
+        if not self._data_manager:
+            self._data_manager = DataManager()
+        return self._data_manager
     
     def main_panel(self):
         if not self._main_panel:

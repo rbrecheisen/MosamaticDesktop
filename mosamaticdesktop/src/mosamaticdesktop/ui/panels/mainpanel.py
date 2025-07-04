@@ -11,7 +11,6 @@ import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.ui.settings import Settings
 from mosamaticdesktop.ui.panels.stackedpanel import StackedPanel
-from mosamaticdesktop.ui.panels.logpanel import LogPanel
 from mosamaticdesktop.core.logging import LogManager
 
 LOG = LogManager()
@@ -23,7 +22,6 @@ class MainPanel(QDockWidget):
         self._settings = None
         self._donate_button = None
         self._stacked_panel = None
-        self._log_panel = None
         self.init_panel()
 
     def init_panel(self):
@@ -54,11 +52,6 @@ class MainPanel(QDockWidget):
             self._stacked_panel = StackedPanel()
         return self._stacked_panel
 
-    def log_panel(self):
-        if not self._log_panel:
-            self._log_panel = LogPanel()
-        return self._log_panel
-    
     # ADDING PANELS
 
     def add_panel(self, panel, name):

@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (
 class Dialog(QDialog):
     def __init__(self, parent=None):
         super(Dialog, self).__init__(parent)
+        self.setFixedWidth(400)
 
     def clear(self):
         raise NotImplementedError()

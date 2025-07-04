@@ -1,7 +1,7 @@
 import os
 
 from PySide6.QtWidgets import (
-    QTextEdit,
+    QLineEdit,
     QPushButton,
     QFileDialog,
     QLabel,
@@ -18,7 +18,9 @@ class LoadFileDialog(Dialog):
     def __init__(self, parent=None):
         super(LoadFileDialog, self).__init__(parent)
         self._file_path_label = None
-        self._file_path_text_edit = None
+        self._file_path_line_edit = None
+        self._name_label = None
+        self._name_line_edit = None
         self._open_file_select_dialog_button = None
         self._load_button = None
         self.init_layout()
@@ -28,10 +30,20 @@ class LoadFileDialog(Dialog):
             self._file_path_label = QLabel(constants.MOSAMATICDESKTOP_LOAD_FILE_DIALOG_FILE_PATH_LABEL_TEXT)
         return self._file_path_label
     
-    def file_path_text_edit(self):
-        if not self._file_path_text_edit:
-            self._file_path_text_edit = QTextEdit(placeholderText=constants.MOSAMATICDESKTOP_LOAD_FILE_DIALOG_FILE_PATH_TEXT_EDIT_PLACEHOLDER_TEXT)
-        return self._file_path_text_edit
+    def file_path_line_edit(self):
+        if not self._file_path_line_edit:
+            self._file_path_line_edit = QLineEdit(placeholderText=constants.MOSAMATICDESKTOP_LOAD_FILE_DIALOG_FILE_PATH_TEXT_EDIT_PLACEHOLDER_TEXT)
+        return self._file_path_line_edit
+    
+    def name_label(self):
+        if not self._name_label:
+            self._name_label = QLabel('Name (optional)')
+        return self._name_label
+    
+    def name_line_edit(self):
+        if not self._name_line_edit:
+            self._name_line_edit = QLineEdit(placeholderText='Enter optional name for data')
+        return self._name_line_edit
     
     def open_file_select_dialog_button(self):
         if not self._open_file_select_dialog_button:
@@ -49,7 +61,9 @@ class LoadFileDialog(Dialog):
     def init_layout(self):
         layout = QVBoxLayout()
         layout.addWidget(self.file_path_label())
-        layout.addWidget(self.file_path_text_edit())
+        layout.addWidget(self.file_path_line_edit())
+        layout.addWidget(self.name_label())
+        layout.addWidget(self.name_line_edit())
         layout.addWidget(self.open_file_select_dialog_button())
         layout.addWidget(self.load_button())
         self.setLayout(layout)
@@ -59,7 +73,7 @@ class LoadFileDialog(Dialog):
         last_directory = Settings().get(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY)
         file_path, _ = QFileDialog.getOpenFileName(self, constants.MOSAMATICDESKTOP_LOAD_FILE_DIALOG_OPEN_SELECT_FILE_PATH_DIALOG_WINDOW_TITLE, dir=last_directory)
         if file_path:
-            self.file_path_text_edit().setText(file_path)
+            self.file_path_line_edit().setText(file_path)
             self.load_button().setEnabled(True)
             directory = os.path.dirname(file_path)
             Settings().set(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY, directory)
@@ -68,4 +82,5 @@ class LoadFileDialog(Dialog):
         raise NotImplementedError()
 
     def clear(self):
-        self.file_path_text_edit().setText('')
+        self.file_path_line_edit().setText('')
+        self.name_line_edit().setText('')
