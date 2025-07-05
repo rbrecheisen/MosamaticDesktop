@@ -91,7 +91,7 @@ class MainWindow(QMainWindow):
 
     def init_data_manager(self):
         self.data_manager().add_listener(self.data_panel())
-        self.data_manager().load_data_from_file()
+        self.data_manager().load_data_from_file(self.settings().get(constants.MOSAMATICDESKTOP_DATA_OBJECTS_KEY))
 
     # GETTERS
 
@@ -169,9 +169,13 @@ class MainWindow(QMainWindow):
     def handle_load_multi_dicom_series_menu_item(self):
         pass
 
+    def showEvent(self, event):
+        # self._settings.print()
+        return super().showEvent(event)
+
     def closeEvent(self, event):
         self.save_geometry_and_state()
-        self.data_manager().save_data_to_file()
+        self.settings().set(constants.MOSAMATICDESKTOP_DATA_OBJECTS_KEY, self.data_manager().save_data_to_file())
         return super().closeEvent(event)
     
     # MISCELLANEOUS

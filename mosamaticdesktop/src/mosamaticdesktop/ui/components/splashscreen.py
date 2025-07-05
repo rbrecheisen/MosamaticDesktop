@@ -23,6 +23,7 @@ class SplashScreen(QWidget):
         self._background_label = None
         self._background_pixmap = None
         self._title_label = None
+        self._sub_text_label = None
         self._start_app_button = None
         self._donate_button = None
         self._close_button = None
@@ -57,6 +58,13 @@ class SplashScreen(QWidget):
             self._title_label.setAlignment(Qt.AlignCenter)
         return self._title_label
     
+    def sub_text_label(self):
+        if not self._sub_text_label:
+            self._sub_text_label = QLabel(constants.MOSAMATICDESKTOP_SPLASH_SCREEN_SUB_TEXT)
+            self._sub_text_label.setStyleSheet(constants.MOSAMATICDESKTOP_SPLASH_SCREEN_SUB_TEXT_STYLE_SHEET)
+            self._sub_text_label.setAlignment(Qt.AlignCenter)
+        return self._sub_text_label
+    
     def start_app_button(self):
         if not self._start_app_button:
             self._start_app_button = QPushButton(constants.MOSAMATICDESKTOP_SPLASH_SCREEN_START_APP_BUTTON_TEXT)
@@ -81,8 +89,9 @@ class SplashScreen(QWidget):
     def init_layout(self):
         layout = QVBoxLayout()
         layout.addWidget(self.title_label())
+        layout.addWidget(self.sub_text_label())
         layout.addWidget(self.start_app_button())
-        layout.addWidget(self.donate_button())
+        # layout.addWidget(self.donate_button())
         layout.addWidget(self.close_button())
         self.setLayout(layout)
         self.setFixedSize(constants.MOSAMATICDESKTOP_SPLASH_SCREEN_WINDOW_W, constants.MOSAMATICDESKTOP_SPLASH_SCREEN_WINDOW_H)

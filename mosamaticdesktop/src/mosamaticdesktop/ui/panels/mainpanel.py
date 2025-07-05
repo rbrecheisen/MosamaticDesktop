@@ -26,7 +26,7 @@ class MainPanel(QDockWidget):
 
     def init_panel(self):
         layout = QVBoxLayout()
-        layout.addWidget(self.donate_button())
+        # layout.addWidget(self.donate_button())
         layout.addWidget(self.stacked_panel())
         container = QWidget()
         container.setLayout(layout)

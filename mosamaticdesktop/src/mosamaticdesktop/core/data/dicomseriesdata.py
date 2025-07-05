@@ -1,5 +1,5 @@
-from mosamaticdesktop.core.data.interfaces.data import Data
-from mosamaticdesktop.core.data.interfaces.filedata import FileData
+from mosamaticdesktop.core.data.data import Data
+from mosamaticdesktop.core.data.filedata import FileData
 
 
 class DicomSeriesData(Data, FileData):

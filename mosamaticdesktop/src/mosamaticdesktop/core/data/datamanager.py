@@ -1,3 +1,4 @@
+import json
 import importlib
 
 from mosamaticdesktop.core.singleton import singleton
@@ -33,18 +34,20 @@ class DataManager:
             listener.new_data(data)
 
     def save_data_to_file(self):
-        with open('D:\\data_objects.txt', 'w') as f:
-            for data in self._data.values():
-                f.write(f'{data.__class__.__name__}::{data.name()}::{data.path()}\n')
+        file_info = {}
+        for data in self._data.values():
+            file_info[data.name()] = {
+                'class_name': data.__class__.__name__,
+                'path': data.path(),
+            }
+        return json.dumps(file_info)
 
-    def load_data_from_file(self):
-        with open('D:\\data_objects.txt', 'r') as f:
-            for line in f.readlines():
-                line = line.strip()
-                items = line.split('::')
-                class_name = items[0]
-                name = items[1]
-                path = items[2]
+    def load_data_from_file(self, file_info):
+        if file_info:
+            file_info = json.loads(file_info)
+            for name, v in file_info.items():
+                class_name = v['class_name']
+                path = v['path']
                 cls = self.load_class(class_name)
                 data = cls()
                 data.set_name(name)
