@@ -2,6 +2,7 @@ from PySide6.QtWidgets import (
     QWidget,
     QLabel,
     QVBoxLayout,
+    QFormLayout,
 )
 
 import mosamaticdesktop.ui.constants as constants
@@ -15,6 +16,7 @@ class DefaultPipelinePanel(QWidget):
     def __init__(self):
         super(DefaultPipelinePanel, self).__init__()
         self._title_label = None
+        # Fields for a QFormLayout
         self.init_layout()
 
     def title_label(self):
