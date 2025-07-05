@@ -1,7 +1,7 @@
 import os
 
-from mosamaticdesktop.core.loaders.interfaces.loader import Loader
-from mosamaticdesktop.core.loaders.interfaces.fileloader import FileLoader
+from mosamaticdesktop.core.loaders.loader import Loader
+from mosamaticdesktop.core.loaders.fileloader import FileLoader
 from mosamaticdesktop.core.loaders.dicomfileloader import DicomFileLoader
 from mosamaticdesktop.core.data.dicomseriesdata import DicomSeriesData
 

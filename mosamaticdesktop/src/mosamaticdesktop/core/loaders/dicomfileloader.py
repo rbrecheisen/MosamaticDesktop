@@ -1,8 +1,8 @@
 import pydicom
 
 
-from mosamaticdesktop.core.loaders.interfaces.loader import Loader
-from mosamaticdesktop.core.loaders.interfaces.fileloader import FileLoader
+from mosamaticdesktop.core.loaders.loader import Loader
+from mosamaticdesktop.core.loaders.fileloader import FileLoader
 from mosamaticdesktop.core.data.dicomfiledata import DicomFileData
 from mosamatic.utils import (
     is_dicom, 
