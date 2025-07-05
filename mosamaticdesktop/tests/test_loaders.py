@@ -2,7 +2,7 @@ import os
 
 from mosamaticdesktop.core.loaders.dicomfileloader import DicomFileLoader
 from mosamaticdesktop.core.loaders.dicomseriesloader import DicomSeriesLoader
-from mosamaticdesktop.core.data.interfaces.data import Data
+from mosamaticdesktop.core.data.data import Data
 from mosamaticdesktop.core.data.dicomfiledata import DicomFileData
 from mosamaticdesktop.core.data.dicomseriesdata import DicomSeriesData
 from tests.sources import get_sources

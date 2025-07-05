@@ -17,6 +17,7 @@ from mosamaticdesktop.ui.panels.mainpanel import MainPanel
 from mosamaticdesktop.ui.panels.settingspanel import SettingsPanel
 from mosamaticdesktop.ui.panels.datapanel import DataPanel
 from mosamaticdesktop.ui.panels.logpanel import LogPanel
+from mosamaticdesktop.ui.panels.pipelines.defaultpipelinepanel import DefaultPipelinePanel
 from mosamaticdesktop.ui.dialogs.loaddicomfiledialog import LoadDicomFileDialog
 from mosamaticdesktop.ui.dialogs.loadmultidicomfiledialog import LoadMultiDicomFileDialog
 from mosamaticdesktop.ui.utils import resource_path, version, is_macos
@@ -35,6 +36,7 @@ class MainWindow(QMainWindow):
         self._settings_panel = None
         self._data_panel = None
         self._log_panel = None
+        self._default_pipeline_panel = None
         self._load_dicom_file_dialog = None
         self._load_multi_dicom_file_dialog = None
         self._load_dicom_series_dialog = None
@@ -56,35 +58,46 @@ class MainWindow(QMainWindow):
     def init_menus(self):
         self.init_app_menu()
         self.init_data_menu()
+        self.init_tasks_menu()
+        self.init_pipelines_menu()
         if is_macos():            
             self.menuBar().setNativeMenuBar(False)
 
     def init_app_menu(self):
-        app_menu_open_settings_action = QAction(constants.MOSAMATICDESKTOP_APP_MENU_OPEN_SETTINGS_PANEL_ACTION_TEXT, self)
-        app_menu_open_settings_action.triggered.connect(self.handle_open_settings_panel_action)
-        app_menu_open_data_panel_action = QAction(constants.MOSAMATICDESKTOP_APP_MENU_OPEN_DATA_PANEL_ACTION_TEXT, self)
-        app_menu_open_data_panel_action.triggered.connect(self.handle_open_data_panel_action)
-        app_menu_exit_action = QAction(constants.MOSAMATICDESKTOP_APP_MENU_EXIT_ACTION_TEXT, self)
-        app_menu_exit_action.triggered.connect(self.close)
+        open_settings_action = QAction(constants.MOSAMATICDESKTOP_APP_MENU_OPEN_SETTINGS_PANEL_ACTION_TEXT, self)
+        open_settings_action.triggered.connect(self.handle_open_settings_panel_action)
+        exit_action = QAction(constants.MOSAMATICDESKTOP_APP_MENU_EXIT_ACTION_TEXT, self)
+        exit_action.triggered.connect(self.close)
         app_menu = self.menuBar().addMenu(constants.MOSAMATICDESKTOP_APP_MENU_TEXT)
-        app_menu.addAction(app_menu_open_settings_action)
-        app_menu.addAction(app_menu_open_data_panel_action)
-        app_menu.addAction(app_menu_exit_action)
+        app_menu.addAction(open_settings_action)
+        app_menu.addAction(exit_action)
 
     def init_data_menu(self):
-        data_menu_load_dicom_file_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_DICOM_FILE_ACTION_TEXT, self)
-        data_menu_load_dicom_file_action.triggered.connect(self.handle_load_dicom_file_action)
-        data_menu_load_multi_dicom_file_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_MULTI_DICOM_FILE_ACTION_TEXT, self)
-        data_menu_load_multi_dicom_file_action.triggered.connect(self.handle_load_multi_dicom_action)
-        data_menu_load_dicom_series_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_DICOM_SERIES_ACTION_TEXT, self)
-        data_menu_load_dicom_series_action.triggered.connect(self.handle_load_dicom_series_action)
-        data_menu_load_multi_dicom_series_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_MULTI_DICOM_SERIES_ACTION_TEXT, self)
-        data_menu_load_multi_dicom_series_action.triggered.connect(self.handle_load_multi_dicom_series_menu_item)
+        load_dicom_file_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_DICOM_FILE_ACTION_TEXT, self)
+        load_dicom_file_action.triggered.connect(self.handle_load_dicom_file_action)
+        load_multi_dicom_file_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_MULTI_DICOM_FILE_ACTION_TEXT, self)
+        load_multi_dicom_file_action.triggered.connect(self.handle_load_multi_dicom_action)
+        load_dicom_series_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_DICOM_SERIES_ACTION_TEXT, self)
+        load_dicom_series_action.triggered.connect(self.handle_load_dicom_series_action)
+        load_multi_dicom_series_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_MULTI_DICOM_SERIES_ACTION_TEXT, self)
+        load_multi_dicom_series_action.triggered.connect(self.handle_load_multi_dicom_series_action)
+        open_data_panel_action = QAction(constants.MOSAMATICDESKTOP_APP_MENU_OPEN_DATA_PANEL_ACTION_TEXT, self)
+        open_data_panel_action.triggered.connect(self.handle_open_data_panel_action)
         data_menu = self.menuBar().addMenu(constants.MOSAMATICDESKTOP_DATA_MENU_TEXT)
-        data_menu.addAction(data_menu_load_dicom_file_action)
-        data_menu.addAction(data_menu_load_multi_dicom_file_action)
-        data_menu.addAction(data_menu_load_dicom_series_action)
-        data_menu.addAction(data_menu_load_multi_dicom_series_action)
+        data_menu.addAction(load_dicom_file_action)
+        data_menu.addAction(load_multi_dicom_file_action)
+        data_menu.addAction(load_dicom_series_action)
+        data_menu.addAction(load_multi_dicom_series_action)
+        data_menu.addAction(open_data_panel_action)
+
+    def init_tasks_menu(self):
+        tasks_menu = self.menuBar().addMenu('Tasks')
+
+    def init_pipelines_menu(self):
+        default_pipeline_action = QAction(constants.MOSAMATICDESKTOP_PIPELINES_MENU_DEFAULT_PIPELINE_ACTION_TEXT, self)
+        default_pipeline_action.triggered.connect(self.handle_default_pipeline_action)
+        pipelines_menu = self.menuBar().addMenu(constants.MOSAMATICDESKTOP_PIPELINES_MENU_TEXT)
+        pipelines_menu.addAction(default_pipeline_action)
 
     def init_status_bar(self):
         self.set_status(constants.MOSAMATICDESKTOP_STATUS_READY)
@@ -108,8 +121,12 @@ class MainWindow(QMainWindow):
     def main_panel(self):
         if not self._main_panel:
             self._main_panel = MainPanel(self)
-            self._main_panel.add_panel(self.data_panel(), constants.MOSAMATICDESKTOP_DATA_PANEL_NAME)
-            self._main_panel.add_panel(self.settings_panel(), constants.MOSAMATICDESKTOP_SETTINGS_PANEL_NAME)
+            self._main_panel.add_panel(
+                self.data_panel(), constants.MOSAMATICDESKTOP_DATA_PANEL_NAME)
+            self._main_panel.add_panel(
+                self.settings_panel(), constants.MOSAMATICDESKTOP_SETTINGS_PANEL_NAME)
+            self._main_panel.add_panel(
+                self.default_pipeline_panel(), constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_NAME)
         return self._main_panel
     
     def settings_panel(self):
@@ -127,6 +144,11 @@ class MainWindow(QMainWindow):
             self._log_panel = LogPanel()
             LOG.add_listener(self._log_panel)
         return self._log_panel
+    
+    def default_pipeline_panel(self):
+        if not self._default_pipeline_panel:
+            self._default_pipeline_panel = DefaultPipelinePanel()
+        return self._default_pipeline_panel
     
     def load_dicom_file_dialog(self):
         if not self._load_dicom_file_dialog:
@@ -166,8 +188,11 @@ class MainWindow(QMainWindow):
     def handle_load_dicom_series_action(self):
         pass
 
-    def handle_load_multi_dicom_series_menu_item(self):
+    def handle_load_multi_dicom_series_action(self):
         pass
+
+    def handle_default_pipeline_action(self):
+        self.main_panel().select_panel(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_NAME)
 
     def showEvent(self, event):
         return super().showEvent(event)
