@@ -170,7 +170,6 @@ class MainWindow(QMainWindow):
         pass
 
     def showEvent(self, event):
-        # self._settings.print()
         return super().showEvent(event)
 
     def closeEvent(self, event):
