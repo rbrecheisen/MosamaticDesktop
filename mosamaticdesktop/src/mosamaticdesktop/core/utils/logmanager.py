@@ -33,8 +33,3 @@ class LogManager:
     def notify_listeners(self, message):
         for listener in self._listeners:
             listener.new_message(message)
-
-
-class LogManagerListener:
-    def new_message(self, message):
-        raise NotImplementedError()

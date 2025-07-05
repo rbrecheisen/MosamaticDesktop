@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (
 
 import mosamaticdesktop.ui.constants as constants
 
-from mosamaticdesktop.core.logging import LogManagerListener
+from mosamaticdesktop.core.utils.logmanagerlistener import LogManagerListener
 
 
 class LogPanel(QDockWidget, LogManagerListener):

@@ -11,7 +11,7 @@ import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.ui.settings import Settings
 from mosamaticdesktop.ui.panels.stackedpanel import StackedPanel
-from mosamaticdesktop.core.logging import LogManager
+from mosamaticdesktop.core.utils.logmanager import LogManager
 
 LOG = LogManager()
 

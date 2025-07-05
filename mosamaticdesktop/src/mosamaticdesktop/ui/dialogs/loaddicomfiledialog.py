@@ -2,7 +2,7 @@ import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.core.loaders.dicomfileloader import DicomFileLoader
 from mosamaticdesktop.core.data.datamanager import DataManager
-from mosamaticdesktop.core.logging import LogManager
+from mosamaticdesktop.core.utils.logmanager import LogManager
 from mosamaticdesktop.ui.dialogs.loadfiledialog import LoadFileDialog
 
 LOG = LogManager()

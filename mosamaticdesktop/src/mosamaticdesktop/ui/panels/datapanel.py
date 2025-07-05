@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (
 import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.core.data.datamanagerlistener import DataManagerListener
-from mosamaticdesktop.core.logging import LogManager
+from mosamaticdesktop.core.utils.logmanager import LogManager
 
 LOG = LogManager()
 

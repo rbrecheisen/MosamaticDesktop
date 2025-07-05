@@ -2,7 +2,7 @@ import json
 import importlib
 
 from mosamaticdesktop.core.singleton import singleton
-from mosamaticdesktop.core.utils import create_name_with_timestamp
+from mosamaticdesktop.core.utils.functions import create_name_with_timestamp
 
 
 @singleton

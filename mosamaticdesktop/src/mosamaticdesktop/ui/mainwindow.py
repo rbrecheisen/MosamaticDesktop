@@ -20,7 +20,7 @@ from mosamaticdesktop.ui.panels.logpanel import LogPanel
 from mosamaticdesktop.ui.dialogs.loaddicomfiledialog import LoadDicomFileDialog
 from mosamaticdesktop.ui.dialogs.loadmultidicomfiledialog import LoadMultiDicomFileDialog
 from mosamaticdesktop.ui.utils import resource_path, version, is_macos
-from mosamaticdesktop.core.logging import LogManager
+from mosamaticdesktop.core.utils.logmanager import LogManager
 from mosamaticdesktop.core.data.datamanager import DataManager
 
 LOG = LogManager()

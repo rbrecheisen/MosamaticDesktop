@@ -2,7 +2,7 @@ from PySide6.QtCore import QSettings
 
 import mosamaticdesktop.ui.constants as constants
 
-from mosamaticdesktop.core.logging import LogManager
+from mosamaticdesktop.core.utils.logmanager import LogManager
 
 LOG = LogManager()
 
