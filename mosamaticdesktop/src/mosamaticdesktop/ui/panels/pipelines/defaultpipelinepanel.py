@@ -9,12 +9,15 @@ from PySide6.QtWidgets import (
     QFormLayout,
     QPushButton,
     QFileDialog,
+    QSizePolicy,
 )
 from PySide6.QtCore import Qt
 
 import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.core.utils.logmanager import LogManager
+from mosamaticdesktop.ui.settings import Settings
+from mosamaticdesktop.ui.utils import is_macos
 
 LOG = LogManager()
 
@@ -35,6 +38,8 @@ class DefaultPipelinePanel(QWidget):
         self._fig_height_spinbox = None
         self._full_scan_checkbox = None
         self._overwrite_checkbox = None
+        self._form_layout = None
+        self._settings = None
         self.init_layout()
 
     def images_dir_line_edit(self):
@@ -67,6 +72,7 @@ class DefaultPipelinePanel(QWidget):
     def output_dir_select_button(self):
         if not self._output_dir_select_button:
             self._output_dir_select_button = QPushButton(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_OUTPUT_DIR_SELECT_BUTTON_TEXT)
+            self._output_dir_select_button.clicked.connect(self.handle_output_dir_select_button)
         return self._output_dir_select_button
     
     def target_size_spinbox(self):
@@ -111,6 +117,18 @@ class DefaultPipelinePanel(QWidget):
             self._overwrite_checkbox = QCheckBox('')
         return self._overwrite_checkbox
     
+    def form_layout(self):
+        if not self._form_layout:
+            self._form_layout = QFormLayout()
+            if is_macos():
+                self._form_layout.setFieldGrowthPolicy(QFormLayout.ExpandingFieldsGrow)
+        return self._form_layout
+    
+    def settings(self):
+        if not self._settings:
+            self._settings = Settings()
+        return self._settings
+    
     def init_layout(self):
         images_dir_layout = QHBoxLayout()
         images_dir_layout.addWidget(self.images_dir_line_edit())
@@ -121,26 +139,40 @@ class DefaultPipelinePanel(QWidget):
         output_dir_layout = QHBoxLayout()
         output_dir_layout.addWidget(self.output_dir_line_edit())
         output_dir_layout.addWidget(self.output_dir_select_button())
-        form_layout = QFormLayout()
-        form_layout.addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_TITLE, QLabel())
-        form_layout.addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_IMAGE_DIR_NAME, images_dir_layout)
-        form_layout.addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_MODEL_FILES_DIR_NAME, model_files_dir_layout)
-        form_layout.addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_OUTPUT_DIR_NAME, output_dir_layout)
-        form_layout.addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_TARGET_SIZE_NAME, self.target_size_spinbox())
-        form_layout.addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_MODEL_TYPE_NAME, self.model_type_combobox())
-        form_layout.addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_MODEL_VERSION_NAME, self.model_version_combobox())
-        form_layout.addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_FIG_WIDTH_NAME, self.fig_width_spinbox())
-        form_layout.addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_FIG_HEIGHT_NAME, self.fig_height_spinbox())
-        form_layout.addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_FULL_SCAN_NAME, self.full_scan_checkbox())
-        form_layout.addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_OVERWRITE_NAME, self.overwrite_checkbox())
-        self.setLayout(form_layout)
+        self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_TITLE, QLabel())
+        self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_IMAGE_DIR_NAME, images_dir_layout)
+        self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_MODEL_FILES_DIR_NAME, model_files_dir_layout)
+        self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_OUTPUT_DIR_NAME, output_dir_layout)
+        self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_TARGET_SIZE_NAME, self.target_size_spinbox())
+        self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_MODEL_TYPE_NAME, self.model_type_combobox())
+        self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_MODEL_VERSION_NAME, self.model_version_combobox())
+        self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_FIG_WIDTH_NAME, self.fig_width_spinbox())
+        self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_FIG_HEIGHT_NAME, self.fig_height_spinbox())
+        self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_FULL_SCAN_NAME, self.full_scan_checkbox())
+        self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_OVERWRITE_NAME, self.overwrite_checkbox())
+        self.setLayout(self.form_layout())
         self.setObjectName(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_NAME)
 
     def handle_images_dir_select_button(self):
-        pass
+        last_directory = self.settings().get(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY)
+        directory, _ = QFileDialog.getExistingDirectory(dir=last_directory)
+        if directory:
+            self.images_dir_line_edit().setText(directory)
+            self.settings().set(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY, directory)
 
     def handle_model_files_dir_select_button(self):
-        pass
+        last_directory = self.settings().get(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY)
+        directory, _ = QFileDialog.getExistingDirectory(dir=last_directory)
+        if directory:
+            self.model_files_dir_line_edit().setText(directory)
+            self.settings().set(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY, directory)
+
+    def handle_output_dir_select_button(self):
+        last_directory = self.settings().get(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY)
+        directory, _ = QFileDialog.getExistingDirectory(dir=last_directory)
+        if directory:
+            self.output_dir_line_edit().setText(directory)
+            self.settings().set(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY, directory)
 
     def handle_model_type_combobox(self, text):
         if text == 'tensorflow':
