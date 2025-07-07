@@ -1,9 +1,7 @@
 from PySide6.QtWidgets import (
-    QWidget,
     QTableWidget,
     QTableWidgetItem,
     QHeaderView,
-    QLabel,
     QVBoxLayout,
     QSizePolicy,
 )
@@ -12,21 +10,18 @@ from PySide6.QtCore import Qt
 import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.ui.settings import Settings
+from mosamaticdesktop.ui.panels.defaultpanel import DefaultPanel
 
 
-class SettingsPanel(QWidget):
+class SettingsPanel(DefaultPanel):
     def __init__(self):
         super(SettingsPanel, self).__init__()
+        self.set_title(constants.MOSAMATICDESKTOP_SETTINGS_PANEL_TITLE)
         self._title_label = None
         self._settings = None
         self._settings_table_widget = None
         self.init_layout()
 
-    def title_label(self):
-        if not self._title_label:
-            self._title_label = QLabel(constants.MOSAMATICDESKTOP_SETTINGS_PANEL_TITLE)
-        return self._title_label
-    
     def settings(self):
         if not self._settings:
             self._settings = Settings()
@@ -62,10 +57,6 @@ class SettingsPanel(QWidget):
 
     def init_layout(self):
         layout = QVBoxLayout()
-        # layout.addWidget(self.title_label())
         layout.addWidget(self.settings_table_widget())
         self.setLayout(layout)
         self.setObjectName(constants.MOSAMATICDESKTOP_SETTINGS_PANEL_NAME)
-
-    def title(self):
-        return self.title_label().text()

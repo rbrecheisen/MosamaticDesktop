@@ -1,6 +1,4 @@
 from PySide6.QtWidgets import (
-    QWidget,
-    QLabel,
     QLineEdit,
     QSpinBox,
     QComboBox,
@@ -9,23 +7,22 @@ from PySide6.QtWidgets import (
     QFormLayout,
     QPushButton,
     QFileDialog,
-    QSizePolicy,
 )
-from PySide6.QtCore import Qt
 
 import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.core.utils.logmanager import LogManager
+from mosamaticdesktop.ui.panels.defaultpanel import DefaultPanel
 from mosamaticdesktop.ui.settings import Settings
 from mosamaticdesktop.ui.utils import is_macos
 
 LOG = LogManager()
 
 
-class DefaultPipelinePanel(QWidget):
+class DefaultPipelinePanel(DefaultPanel):
     def __init__(self):
         super(DefaultPipelinePanel, self).__init__()
-        self._title_label = None
+        self.set_title(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_TITLE)
         self._images_dir_line_edit = None
         self._images_dir_select_button = None
         self._model_files_dir_line_edit = None
@@ -40,13 +37,9 @@ class DefaultPipelinePanel(QWidget):
         self._full_scan_checkbox = None
         self._overwrite_checkbox = None
         self._form_layout = None
+        self._run_pipeline_button = None
         self._settings = None
         self.init_layout()
-
-    def title_label(self):
-        if not self._title_label:
-            self._title_label = QLabel(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_TITLE)
-        return self._title_label
 
     def images_dir_line_edit(self):
         if not self._images_dir_line_edit:
@@ -130,6 +123,12 @@ class DefaultPipelinePanel(QWidget):
                 self._form_layout.setFieldGrowthPolicy(QFormLayout.ExpandingFieldsGrow)
         return self._form_layout
     
+    def run_pipeline_button(self):
+        if not self._run_pipeline_button:
+            self._run_pipeline_button = QPushButton('Run pipeline')
+            self._run_pipeline_button.clicked.connect(self.handle_run_pipeline_button)
+        return self._run_pipeline_button
+    
     def settings(self):
         if not self._settings:
             self._settings = Settings()
@@ -191,5 +190,5 @@ class DefaultPipelinePanel(QWidget):
         if text == '2.2':
             self.model_type_combobox().setCurrentText('pytorch')
 
-    def title(self):
-        return self.title_label().text()
+    def handle_run_pipeline_button(self):
+        pass

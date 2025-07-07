@@ -1,6 +1,4 @@
 from PySide6.QtWidgets import (
-    QWidget,
-    QLabel,
     QListWidget,
     QVBoxLayout,
 )
@@ -9,22 +7,18 @@ import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.core.data.datamanagerlistener import DataManagerListener
 from mosamaticdesktop.core.utils.logmanager import LogManager
+from mosamaticdesktop.ui.panels.defaultpanel import DefaultPanel
 
 LOG = LogManager()
 
 
-class DataPanel(QWidget, DataManagerListener):
+class DataPanel(DefaultPanel, DataManagerListener):
     def __init__(self):
         super(DataPanel, self).__init__()
-        self._title_label = None
+        self.set_title(constants.MOSAMATICDESKTOP_DATA_PANEL_TITLE)
         self._data_list_widget = None
         self.init_layout()
 
-    def title_label(self):
-        if not self._title_label:
-            self._title_label = QLabel(constants.MOSAMATICDESKTOP_DATA_PANEL_TITLE)
-        return self._title_label
-    
     def data_list_widget(self):
         if not self._data_list_widget:
             self._data_list_widget = QListWidget()
@@ -32,13 +26,9 @@ class DataPanel(QWidget, DataManagerListener):
 
     def init_layout(self):
         layout = QVBoxLayout()
-        # layout.addWidget(self.title_label())
         layout.addWidget(self.data_list_widget())
         self.setLayout(layout)
         self.setObjectName(constants.MOSAMATICDESKTOP_DATA_PANEL_NAME)
-
-    def title(self):
-        return self.title_label().text()
 
     # implements(DataManagerListener)
     def new_data(self, data):
