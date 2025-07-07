@@ -1,12 +1,16 @@
+import os
+
 from PySide6.QtWidgets import (
     QLineEdit,
     QSpinBox,
     QComboBox,
     QCheckBox,
     QHBoxLayout,
+    QVBoxLayout,
     QFormLayout,
     QPushButton,
     QFileDialog,
+    QMessageBox,
 )
 
 import mosamaticdesktop.ui.constants as constants
@@ -114,6 +118,7 @@ class DefaultPipelinePanel(DefaultPanel):
     def overwrite_checkbox(self):
         if not self._overwrite_checkbox:
             self._overwrite_checkbox = QCheckBox('')
+            self._overwrite_checkbox.setChecked(True)
         return self._overwrite_checkbox
     
     def form_layout(self):
@@ -125,7 +130,8 @@ class DefaultPipelinePanel(DefaultPanel):
     
     def run_pipeline_button(self):
         if not self._run_pipeline_button:
-            self._run_pipeline_button = QPushButton('Run pipeline')
+            self._run_pipeline_button = QPushButton(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_RUN_PIPELINE_BUTTON_TEXT)
+            self._run_pipeline_button.setStyleSheet(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_RUN_PIPELINE_BUTTON_STYLESHEET)
             self._run_pipeline_button.clicked.connect(self.handle_run_pipeline_button)
         return self._run_pipeline_button
     
@@ -154,7 +160,11 @@ class DefaultPipelinePanel(DefaultPanel):
         self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_FIG_HEIGHT_NAME, self.fig_height_spinbox())
         self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_FULL_SCAN_NAME, self.full_scan_checkbox())
         self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_OVERWRITE_NAME, self.overwrite_checkbox())
-        self.setLayout(self.form_layout())
+        layout = QVBoxLayout()
+        layout.addLayout(self.form_layout())
+        layout.addWidget(self.run_pipeline_button())
+        # self.setLayout(self.form_layout())
+        self.setLayout(layout)
         self.setObjectName(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_NAME)
 
     def handle_images_dir_select_button(self):
@@ -191,4 +201,31 @@ class DefaultPipelinePanel(DefaultPanel):
             self.model_type_combobox().setCurrentText('pytorch')
 
     def handle_run_pipeline_button(self):
-        pass
+        errors = self.check_inputs_and_parameters()
+        if len(errors) > 0:
+            error_message = 'Following errors were encountered:\n'
+            for error in errors:
+                error_message += f' - {error}\n'
+            QMessageBox.information(self, 'Error', error_message)
+        else:
+            print(f'Running pipeline')
+
+    def check_inputs_and_parameters(self):
+        errors = []
+        if self.images_dir_line_edit().text() == '':
+            errors.append('Empty images directory path')
+        elif not os.path.isdir(self.images_dir_line_edit().text()):
+            errors.append('Images directory does not exist')
+        if self.model_files_dir_line_edit().text() == '':
+            errors.append('Empty model files directory path')
+        elif not os.path.isdir(self.model_files_dir_line_edit().text()):
+            errors.append('Model files directory does not exist')
+        if self.output_dir_line_edit().text() == '':
+            errors.append('Empty output directory path')
+        elif os.path.isdir(self.output_dir_line_edit().text()) and not self.overwrite_checkbox().isChecked():
+            errors.append('Output directory exists but overwrite=False. Please remove output directory first')
+        if self.target_size_spinbox().value() != 512:
+            errors.append('Target size must be 512')
+        if self.full_scan_checkbox().isChecked():
+            errors.append('Full scan support is not available yet')
+        return errors
