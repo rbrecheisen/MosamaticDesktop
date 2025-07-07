@@ -25,6 +25,7 @@ LOG = LogManager()
 class DefaultPipelinePanel(QWidget):
     def __init__(self):
         super(DefaultPipelinePanel, self).__init__()
+        self._title_label = None
         self._images_dir_line_edit = None
         self._images_dir_select_button = None
         self._model_files_dir_line_edit = None
@@ -41,6 +42,11 @@ class DefaultPipelinePanel(QWidget):
         self._form_layout = None
         self._settings = None
         self.init_layout()
+
+    def title_label(self):
+        if not self._title_label:
+            self._title_label = QLabel(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_TITLE)
+        return self._title_label
 
     def images_dir_line_edit(self):
         if not self._images_dir_line_edit:
@@ -139,7 +145,6 @@ class DefaultPipelinePanel(QWidget):
         output_dir_layout = QHBoxLayout()
         output_dir_layout.addWidget(self.output_dir_line_edit())
         output_dir_layout.addWidget(self.output_dir_select_button())
-        self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_TITLE, QLabel())
         self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_IMAGE_DIR_NAME, images_dir_layout)
         self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_MODEL_FILES_DIR_NAME, model_files_dir_layout)
         self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_OUTPUT_DIR_NAME, output_dir_layout)
@@ -185,3 +190,6 @@ class DefaultPipelinePanel(QWidget):
             self.model_type_combobox().setCurrentText('tensorflow')
         if text == '2.2':
             self.model_type_combobox().setCurrentText('pytorch')
+
+    def title(self):
+        return self.title_label().text()

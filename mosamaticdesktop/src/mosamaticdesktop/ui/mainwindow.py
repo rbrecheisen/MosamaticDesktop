@@ -127,6 +127,7 @@ class MainWindow(QMainWindow):
                 self.settings_panel(), constants.MOSAMATICDESKTOP_SETTINGS_PANEL_NAME)
             self._main_panel.add_panel(
                 self.default_pipeline_panel(), constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_NAME)
+            self._main_panel.select_panel(constants.MOSAMATICDESKTOP_DATA_PANEL_NAME)
         return self._main_panel
     
     def settings_panel(self):

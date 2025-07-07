@@ -62,7 +62,10 @@ class SettingsPanel(QWidget):
 
     def init_layout(self):
         layout = QVBoxLayout()
-        layout.addWidget(self.title_label())
+        # layout.addWidget(self.title_label())
         layout.addWidget(self.settings_table_widget())
         self.setLayout(layout)
         self.setObjectName(constants.MOSAMATICDESKTOP_SETTINGS_PANEL_NAME)
+
+    def title(self):
+        return self.title_label().text()

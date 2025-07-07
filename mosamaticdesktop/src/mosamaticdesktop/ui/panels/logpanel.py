@@ -33,12 +33,13 @@ class LogPanel(QDockWidget, LogManagerListener):
         clear_logs_button = QPushButton(constants.MOSAMATICDESKTOP_LOG_PANEL_CLEAR_LOGS_BUTTON)
         clear_logs_button.clicked.connect(self.handle_clear_logs_button)
         layout = QVBoxLayout()
-        layout.addWidget(self.title_label())
+        # layout.addWidget(self.title_label())
         layout.addWidget(self.text_edit())
         layout.addWidget(clear_logs_button)
         container = QWidget()
         container.setLayout(layout)
         self.setObjectName(constants.MOSAMATICDESKTOP_LOG_PANEL_NAME)
+        self.setWindowTitle(self.title_label().text())
         self.setWidget(container)
 
     def add_line(self, line):

@@ -32,10 +32,13 @@ class DataPanel(QWidget, DataManagerListener):
 
     def init_layout(self):
         layout = QVBoxLayout()
-        layout.addWidget(self.title_label())
+        # layout.addWidget(self.title_label())
         layout.addWidget(self.data_list_widget())
         self.setLayout(layout)
         self.setObjectName(constants.MOSAMATICDESKTOP_DATA_PANEL_NAME)
+
+    def title(self):
+        return self.title_label().text()
 
     # implements(DataManagerListener)
     def new_data(self, data):
