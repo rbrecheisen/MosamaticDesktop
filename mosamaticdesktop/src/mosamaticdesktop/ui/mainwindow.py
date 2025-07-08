@@ -17,6 +17,7 @@ from mosamaticdesktop.ui.panels.mainpanel import MainPanel
 from mosamaticdesktop.ui.panels.settingspanel import SettingsPanel
 from mosamaticdesktop.ui.panels.datapanel import DataPanel
 from mosamaticdesktop.ui.panels.logpanel import LogPanel
+from mosamaticdesktop.ui.panels.tasks.decompressdicomfilestaskpanel import DecompressDicomFilesTaskPanel
 from mosamaticdesktop.ui.panels.pipelines.defaultpipelinepanel import DefaultPipelinePanel
 from mosamaticdesktop.ui.dialogs.loaddicomfiledialog import LoadDicomFileDialog
 from mosamaticdesktop.ui.dialogs.loadmultidicomfiledialog import LoadMultiDicomFileDialog
@@ -36,6 +37,7 @@ class MainWindow(QMainWindow):
         self._settings_panel = None
         self._data_panel = None
         self._log_panel = None
+        self._decompress_dicom_files_task_panel = None
         self._default_pipeline_panel = None
         self._load_dicom_file_dialog = None
         self._load_multi_dicom_file_dialog = None
@@ -91,7 +93,10 @@ class MainWindow(QMainWindow):
         data_menu.addAction(open_data_panel_action)
 
     def init_tasks_menu(self):
-        tasks_menu = self.menuBar().addMenu('Tasks')
+        decompress_dicom_files_task_action = QAction(constants.MOSAMATICDESKTOP_TASKS_MENU_DECOMPRESS_DICOM_FILES_TASK_ACTION_TEXT, self)
+        decompress_dicom_files_task_action.triggered.connect(self.handle_decompress_dicom_files_task_action)
+        tasks_menu = self.menuBar().addMenu(constants.MOSAMATICDESKTOP_TASKS_MENU_TEXT)
+        tasks_menu.addAction(decompress_dicom_files_task_action)
 
     def init_pipelines_menu(self):
         default_pipeline_action = QAction(constants.MOSAMATICDESKTOP_PIPELINES_MENU_DEFAULT_PIPELINE_ACTION_TEXT, self)
@@ -127,6 +132,8 @@ class MainWindow(QMainWindow):
                 self.settings_panel(), constants.MOSAMATICDESKTOP_SETTINGS_PANEL_NAME)
             self._main_panel.add_panel(
                 self.default_pipeline_panel(), constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_NAME)
+            self._main_panel.add_panel(
+                self.decompress_dicom_files_task_panel(), constants.MOSAMATICDESKTOP_DECOMPRESS_DICOM_FILES_TASK_PANEL_NAME)
             self._main_panel.select_panel(constants.MOSAMATICDESKTOP_DATA_PANEL_NAME)
         return self._main_panel
     
@@ -145,6 +152,11 @@ class MainWindow(QMainWindow):
             self._log_panel = LogPanel()
             LOG.add_listener(self._log_panel)
         return self._log_panel
+    
+    def decompress_dicom_files_task_panel(self):
+        if not self._decompress_dicom_files_task_panel:
+            self._decompress_dicom_files_task_panel = DecompressDicomFilesTaskPanel()
+        return self._decompress_dicom_files_task_panel
     
     def default_pipeline_panel(self):
         if not self._default_pipeline_panel:
@@ -191,6 +203,9 @@ class MainWindow(QMainWindow):
 
     def handle_load_multi_dicom_series_action(self):
         pass
+
+    def handle_decompress_dicom_files_task_action(self):
+        self.main_panel().select_panel(constants.MOSAMATICDESKTOP_DECOMPRESS_DICOM_FILES_TASK_PANEL_NAME)
 
     def handle_default_pipeline_action(self):
         self.main_panel().select_panel(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_NAME)

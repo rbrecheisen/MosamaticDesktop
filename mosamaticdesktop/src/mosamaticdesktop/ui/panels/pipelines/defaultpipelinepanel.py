@@ -169,21 +169,21 @@ class DefaultPipelinePanel(DefaultPanel):
 
     def handle_images_dir_select_button(self):
         last_directory = self.settings().get(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY)
-        directory, _ = QFileDialog.getExistingDirectory(dir=last_directory)
+        directory = QFileDialog.getExistingDirectory(dir=last_directory)
         if directory:
             self.images_dir_line_edit().setText(directory)
             self.settings().set(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY, directory)
 
     def handle_model_files_dir_select_button(self):
         last_directory = self.settings().get(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY)
-        directory, _ = QFileDialog.getExistingDirectory(dir=last_directory)
+        directory = QFileDialog.getExistingDirectory(dir=last_directory)
         if directory:
             self.model_files_dir_line_edit().setText(directory)
             self.settings().set(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY, directory)
 
     def handle_output_dir_select_button(self):
         last_directory = self.settings().get(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY)
-        directory, _ = QFileDialog.getExistingDirectory(dir=last_directory)
+        directory = QFileDialog.getExistingDirectory(dir=last_directory)
         if directory:
             self.output_dir_line_edit().setText(directory)
             self.settings().set(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY, directory)
