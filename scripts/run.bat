@@ -25,7 +25,7 @@ if /I "%~1"=="" (
 
     rmdir /s /q mosamaticdesktop\build
     call python scripts\python\updatetomlversion.py %VERSION%
-    call python scripts\python\updatetomlrequirements.py
+    call python scripts\python\updatetomlrequirements.py windows
     cd mosamaticdesktop
     call briefcase create
     call briefcase build

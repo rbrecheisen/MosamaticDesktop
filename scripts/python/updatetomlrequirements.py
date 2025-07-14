@@ -1,12 +1,13 @@
+import sys
 import tomli # type: ignore
 import tomli_w
 
 
-def main():
+def main(requirements_file):
     with open('mosamaticdesktop/pyproject.toml', 'rb') as f:
         data = tomli.load(f)
     print(data['tool']['briefcase']['app']['mosamaticdesktop'])
-    with open('requirements.txt', 'r') as f:
+    with open(requirements_file, 'r') as f:
         requires = []
         start_including = False
         for line in f.readlines():
@@ -22,4 +23,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    requirements_file = 'requirements-windows.txt' if sys.argv[1] == 'windows' else 'requirements-macos.txt'
+    main(requirements_file)

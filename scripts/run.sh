@@ -21,7 +21,7 @@ elif [ "${1}" == "--build" ]; then
 
     rm -rf mosamaticdesktop/build
     python scripts/python/updatetomlversion.py ${VERSION}
-    python scripts/python/updatetomlrequirements.py
+    python scripts/python/updatetomlrequirements.py macos
     cd mosamaticdesktop
     briefcase create
     briefcase build

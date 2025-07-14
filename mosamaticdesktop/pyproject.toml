@@ -1,25 +1,24 @@
-# This project was generated with 0.3.23 using template: https://github.com/beeware/briefcase-template @ v0.3.23
 [tool.briefcase]
 project_name = "MosamaticDesktop"
 bundle = "com.rbeesoft"
-version = "1.0.0"
+version = "1.0"
 url = "https://rbeesoft.com/mosamaticdesktop"
-license.file = "LICENSE"
 author = "Ralph Brecheisen"
 author_email = "ralph.brecheisen@gmail.com"
+
+[tool.briefcase.license]
+file = "LICENSE"
 
 [tool.briefcase.app.mosamaticdesktop]
 formal_name = "MosamaticDesktop"
 description = "My first application"
-long_description = """More details about the app should go here.
-"""
+long_description = "More details about the app should go here.\n"
 sources = [
     "src/mosamaticdesktop",
 ]
 test_sources = [
     "tests",
 ]
-
 requires = [
     "pyside6>=6.9",
     "mosamatic-cli>=1.5",
@@ -30,6 +29,13 @@ requires = [
     "openpyxl",
     "pillow",
     "python-gdcm",
+    "scipy",
+    "torch",
+    "torchvision",
+    "tensorboard==2.15.2",
+    "tensorboard-data-server==0.7.2",
+    "tensorflow==2.15.0",
+    "tensorflow-io-gcs-filesystem>=0.31",
 ]
 test_requires = [
     "pytest",
@@ -37,22 +43,17 @@ test_requires = [
 
 [tool.briefcase.app.mosamaticdesktop.macOS]
 universal_build = true
-# As of Pyside 6.8, PySide enforces a macOS 12 minimum on wheels.
 min_os_version = "12.0"
 requires = [
     "std-nslog~=1.0.3",
 ]
 
 [tool.briefcase.app.mosamaticdesktop.linux]
-requires = [
-]
+requires = []
 
 [tool.briefcase.app.mosamaticdesktop.linux.system.debian]
-system_requires = [
-]
-
+system_requires = []
 system_runtime_requires = [
-    # Derived from https://doc.qt.io/qt-6/linux-requirements.html
     "libxext6",
     "libxrender1",
     "libx11-xcb1",
@@ -75,39 +76,28 @@ system_runtime_requires = [
 ]
 
 [tool.briefcase.app.mosamaticdesktop.linux.system.rhel]
-system_requires = [
-]
-
+system_requires = []
 system_runtime_requires = [
     "qt6-qtbase-gui",
 ]
 
 [tool.briefcase.app.mosamaticdesktop.linux.system.suse]
-system_requires = [
-]
-
+system_requires = []
 system_runtime_requires = [
     "libgthread-2_0-0",
     "libQt6Gui6",
 ]
 
 [tool.briefcase.app.mosamaticdesktop.linux.system.arch]
-system_requires = [
-]
-
+system_requires = []
 system_runtime_requires = [
     "qt6-base",
 ]
 
 [tool.briefcase.app.mosamaticdesktop.linux.appimage]
 manylinux = "manylinux_2_28"
-
-system_requires = [
-# ?? FIXME
-]
-
-linuxdeploy_plugins = [
-]
+system_requires = []
+linuxdeploy_plugins = []
 
 [tool.briefcase.app.mosamaticdesktop.linux.flatpak]
 flatpak_runtime = "org.kde.Platform"
@@ -115,17 +105,13 @@ flatpak_runtime_version = "6.9"
 flatpak_sdk = "org.kde.Sdk"
 
 [tool.briefcase.app.mosamaticdesktop.windows]
-requires = [
-]
+requires = []
 
-# Mobile deployments
 [tool.briefcase.app.mosamaticdesktop.iOS]
 supported = false
 
 [tool.briefcase.app.mosamaticdesktop.android]
 supported = false
 
-# Web deployments
 [tool.briefcase.app.mosamaticdesktop.web]
 supported = false
-
