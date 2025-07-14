@@ -59,8 +59,8 @@ class MainWindow(QMainWindow):
 
     def init_menus(self):
         self.init_app_menu()
-        self.init_data_menu()
-        self.init_tasks_menu()
+        # self.init_data_menu()
+        # self.init_tasks_menu()
         self.init_pipelines_menu()
         if is_macos():            
             self.menuBar().setNativeMenuBar(False)
@@ -134,7 +134,7 @@ class MainWindow(QMainWindow):
                 self.default_pipeline_panel(), constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_NAME)
             self._main_panel.add_panel(
                 self.decompress_dicom_files_task_panel(), constants.MOSAMATICDESKTOP_DECOMPRESS_DICOM_FILES_TASK_PANEL_NAME)
-            self._main_panel.select_panel(constants.MOSAMATICDESKTOP_DATA_PANEL_NAME)
+            self._main_panel.select_panel(constants.MOSAMATICDESKTOP_SETTINGS_PANEL_NAME)
         return self._main_panel
     
     def settings_panel(self):

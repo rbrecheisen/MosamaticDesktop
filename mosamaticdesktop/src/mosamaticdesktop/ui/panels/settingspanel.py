@@ -4,6 +4,9 @@ from PySide6.QtWidgets import (
     QHeaderView,
     QVBoxLayout,
     QSizePolicy,
+    QPushButton,
+    QLabel,
+    QMessageBox,
 )
 from PySide6.QtCore import Qt
 
@@ -17,10 +20,16 @@ class SettingsPanel(DefaultPanel):
     def __init__(self):
         super(SettingsPanel, self).__init__()
         self.set_title(constants.MOSAMATICDESKTOP_SETTINGS_PANEL_TITLE)
-        self._title_label = None
+        self._settings_file_path_label = None
         self._settings = None
         self._settings_table_widget = None
+        self._clear_settings_button = None
         self.init_layout()
+
+    def settings_file_path_label(self):
+        if not self._settings_file_path_label:
+            self._settings_file_path_label = QLabel(f'File path: {self.settings().fileName()}')
+        return self._settings_file_path_label
 
     def settings(self):
         if not self._settings:
@@ -54,9 +63,23 @@ class SettingsPanel(DefaultPanel):
             self._settings_table_widget.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
             self._settings_table_widget.horizontalHeader().setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         return self._settings_table_widget
+    
+    def clear_settings_button(self):
+        if not self._clear_settings_button:
+            self._clear_settings_button = QPushButton('Clear settings')
+            self._clear_settings_button.setStyleSheet('color: white; background-color: red; font-weight: bold;')
+            self._clear_settings_button.clicked.connect(self.handle_clear_settings_button)
+        return self._clear_settings_button
 
     def init_layout(self):
         layout = QVBoxLayout()
+        layout.addWidget(self.settings_file_path_label())
         layout.addWidget(self.settings_table_widget())
+        layout.addWidget(self.clear_settings_button())
         self.setLayout(layout)
         self.setObjectName(constants.MOSAMATICDESKTOP_SETTINGS_PANEL_NAME)
+
+    def handle_clear_settings_button(self):
+        import os
+        os.remove(self.settings().fileName())
+        QMessageBox.information(self, 'Warning', 'Settings cleared. Please restart application for changes to take effect.')

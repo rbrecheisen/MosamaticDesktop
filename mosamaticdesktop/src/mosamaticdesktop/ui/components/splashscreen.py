@@ -37,9 +37,9 @@ class SplashScreen(QWidget):
     def background_label(self):
         if not self._background_label:
             self._background_label = QLabel(self)
-            self._background_label.setPixmap(self.background_pixmap())
-            self._background_label.setGeometry(0, 0, self.width(), self.height())
-            self._background_label.lower()
+            # self._background_label.setPixmap(self.background_pixmap())
+            # self._background_label.setGeometry(0, 0, self.width(), self.height())
+            # self._background_label.lower()
         return self._background_label
     
     def background_pixmap(self):
@@ -111,6 +111,6 @@ class SplashScreen(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        scaled = self.background_pixmap().scaled(self.size(), Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation)
-        self.background_label().setPixmap(scaled)
-        self.background_label().setGeometry(0, 0, self.width(), self.height())
+        # scaled = self.background_pixmap().scaled(self.size(), Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation)
+        # self.background_label().setPixmap(scaled)
+        # self.background_label().setGeometry(0, 0, self.width(), self.height())

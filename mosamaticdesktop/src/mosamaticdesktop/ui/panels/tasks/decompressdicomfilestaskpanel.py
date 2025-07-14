@@ -90,7 +90,7 @@ class DecompressDicomFilesTaskPanel(DefaultPanel):
         output_dir_layout = QHBoxLayout()
         output_dir_layout.addWidget(self.output_dir_line_edit())
         output_dir_layout.addWidget(self.output_dir_select_button())
-        self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_IMAGE_DIR_NAME, images_dir_layout)
+        self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_IMAGES_DIR_NAME, images_dir_layout)
         self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_OUTPUT_DIR_NAME, output_dir_layout)
         self.form_layout().addRow(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_OVERWRITE_NAME, self.overwrite_checkbox())
         layout = QVBoxLayout()
@@ -121,9 +121,12 @@ class DecompressDicomFilesTaskPanel(DefaultPanel):
                 error_message += f' - {error}\n'
             QMessageBox.information(self, 'Error', error_message)
         else:
-            print(f'Running task...')
+            LOG.info(f'Running task...')
             task = DecompressDicomFilesTask(
-                self.images_dir_line_edit().text(), self.output_dir_line_edit().text(), self.overwrite_checkbox().isChecked())
+                self.images_dir_line_edit().text(), 
+                self.output_dir_line_edit().text(), 
+                self.overwrite_checkbox().isChecked()
+            )
             task.run()
 
     def check_inputs_and_parameters(self):
