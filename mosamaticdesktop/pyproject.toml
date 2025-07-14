@@ -13,6 +13,7 @@ file = "LICENSE"
 formal_name = "MosamaticDesktop"
 description = "My first application"
 long_description = "More details about the app should go here.\n"
+console = true
 sources = [
     "src/mosamaticdesktop",
 ]
@@ -22,6 +23,7 @@ test_sources = [
 requires = [
     "pyside6>=6.9",
     "mosamatic-cli>=1.5",
+    "click<8.1.8",
     "pendulum",
     "pydicom",
     "numpy",
