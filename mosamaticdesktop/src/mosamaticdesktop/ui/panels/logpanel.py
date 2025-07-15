@@ -43,8 +43,19 @@ class LogPanel(QDockWidget, LogManagerListener):
         self.setWindowTitle(self.title_label().text())
         self.setWidget(container)
 
+    # HELPERS
+
     def add_line(self, line):
         self.text_edit().insertPlainText(line + '\n')
+        self.move_to_end()
+
+    def move_to_end(self):
+        cursor = self.text_edit().textCursor()
+        cursor.movePosition(cursor.MoveOperation.End)
+        self.text_edit().setTextCursor(cursor)
+        self.text_edit().ensureCursorVisible()
+
+    # EVENTS
 
     def handle_clear_logs_button(self):
         self.text_edit().clear()

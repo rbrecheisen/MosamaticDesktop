@@ -11,12 +11,12 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QPixmap
 
 from mosamaticdesktop.ui.mainwindow import MainWindow
-from mosamaticdesktop.ui.utils import resource_path, set_opacity
+from mosamaticdesktop.ui.utils import resource_path, set_opacity, version
 
 RESOURCES_IMAGES_DIR = 'mosamaticdesktop/resources/images'
 BACKGROUND_IMAGE_FILE_NAME = 'body-composition.jpg'
 BACKGROUND_IMAGE_OPACITY = 0.4
-WINDOW_W = 500
+WINDOW_W = 600
 WINDOW_H = 300
 DONATE_URL = 'https://rbeesoft.nl/wordpress/'
 
@@ -57,7 +57,7 @@ class SplashScreen(QWidget):
     
     def title_label(self):
         if not self._title_label:
-            self._title_label = QLabel('Mosamatic Desktop')
+            self._title_label = QLabel(f'Mosamatic Desktop {version()}')
             self._title_label.setStyleSheet('color: rgb(64, 64, 64); font-weight: bold; font-size: 32pt;')
             self._title_label.setAlignment(Qt.AlignCenter)
         return self._title_label

@@ -159,6 +159,9 @@ class MainWindow(QMainWindow):
         if not self._log_panel:
             self._log_panel = LogPanel()
             LOG.add_listener(self._log_panel)
+            from mosamatic.logging import LogManager as MosamaticLogManager
+            mosamatic_logger = MosamaticLogManager()
+            mosamatic_logger.add_listener(self._log_panel)
         return self._log_panel
     
     def decompress_dicom_files_task_panel(self):
