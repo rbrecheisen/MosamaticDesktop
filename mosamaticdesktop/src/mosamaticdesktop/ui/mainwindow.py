@@ -2,6 +2,7 @@ import os
 
 from PySide6.QtWidgets import (
     QMainWindow,
+    QStyle,
 )
 from PySide6.QtGui import (
     QGuiApplication,
@@ -9,8 +10,6 @@ from PySide6.QtGui import (
     QIcon,
 )
 from PySide6.QtCore import Qt, QByteArray
-
-import mosamaticdesktop.ui.constants as constants
 
 from mosamaticdesktop.ui.settings import Settings
 from mosamaticdesktop.ui.panels.mainpanel import MainPanel
@@ -26,6 +25,14 @@ from mosamaticdesktop.core.utils.logmanager import LogManager
 from mosamaticdesktop.core.data.datamanager import DataManager
 
 LOG = LogManager()
+
+WINDOW_TITLE = 'Mosamatc Desktop'
+WINDOW_W = 1024
+WINDOW_H = 600
+ICON_EXIT = QStyle.SP_MessageBoxCritical
+ICON_SETTINGS = QStyle.SP_VistaShield
+ICONS_DIR_PATH = 'mosamaticdesktop/resources/images/icons'
+ICON_FILE_NAME = 'mosamaticdesktop.icns' if is_macos() else 'mosamaticdesktop.ico'
 
 
 class MainWindow(QMainWindow):
@@ -47,9 +54,8 @@ class MainWindow(QMainWindow):
         self.init_data_manager()
 
     def init_window(self):
-        self.setWindowTitle(f'{constants.MOSAMATICDESKTOP_WINDOW_TITLE} {version()}')
-        self.setWindowIcon(QIcon(resource_path(os.path.join(
-            constants.MOSAMATICDESKTOP_RESOURCES_IMAGES_ICONS_DIR, constants.MOSAMATICDESKTOP_RESOURCES_ICON))))
+        self.setWindowTitle(f'{WINDOW_TITLE} {version()}')
+        self.setWindowIcon(QIcon(resource_path(os.path.join(ICONS_DIR_PATH, ICON_FILE_NAME))))
         if not self.load_geometry_and_state():
             self.set_default_size_and_position()
         self.init_menus()
@@ -66,26 +72,26 @@ class MainWindow(QMainWindow):
             self.menuBar().setNativeMenuBar(False)
 
     def init_app_menu(self):
-        open_settings_action = QAction(constants.MOSAMATICDESKTOP_APP_MENU_OPEN_SETTINGS_PANEL_ACTION_TEXT, self)
+        open_settings_action = QAction('Settings...', self)
         open_settings_action.triggered.connect(self.handle_open_settings_panel_action)
-        exit_action = QAction(constants.MOSAMATICDESKTOP_APP_MENU_EXIT_ACTION_TEXT, self)
+        exit_action = QAction('Exit', self)
         exit_action.triggered.connect(self.close)
-        app_menu = self.menuBar().addMenu(constants.MOSAMATICDESKTOP_APP_MENU_TEXT)
+        app_menu = self.menuBar().addMenu('Application')
         app_menu.addAction(open_settings_action)
         app_menu.addAction(exit_action)
 
     def init_data_menu(self):
-        load_dicom_file_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_DICOM_FILE_ACTION_TEXT, self)
+        load_dicom_file_action = QAction('Load DICOM file...', self)
         load_dicom_file_action.triggered.connect(self.handle_load_dicom_file_action)
-        load_multi_dicom_file_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_MULTI_DICOM_FILE_ACTION_TEXT, self)
+        load_multi_dicom_file_action = QAction('Load multiple DICOM files...', self)
         load_multi_dicom_file_action.triggered.connect(self.handle_load_multi_dicom_action)
-        load_dicom_series_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_DICOM_SERIES_ACTION_TEXT, self)
+        load_dicom_series_action = QAction('Load DICOM series...', self)
         load_dicom_series_action.triggered.connect(self.handle_load_dicom_series_action)
-        load_multi_dicom_series_action = QAction(constants.MOSAMATICDESKTOP_DATA_MENU_LOAD_MULTI_DICOM_SERIES_ACTION_TEXT, self)
+        load_multi_dicom_series_action = QAction('Load multiple DICOM series...', self)
         load_multi_dicom_series_action.triggered.connect(self.handle_load_multi_dicom_series_action)
-        open_data_panel_action = QAction(constants.MOSAMATICDESKTOP_APP_MENU_OPEN_DATA_PANEL_ACTION_TEXT, self)
+        open_data_panel_action = QAction('Data manager', self)
         open_data_panel_action.triggered.connect(self.handle_open_data_panel_action)
-        data_menu = self.menuBar().addMenu(constants.MOSAMATICDESKTOP_DATA_MENU_TEXT)
+        data_menu = self.menuBar().addMenu('Data')
         data_menu.addAction(load_dicom_file_action)
         data_menu.addAction(load_multi_dicom_file_action)
         data_menu.addAction(load_dicom_series_action)
@@ -93,23 +99,23 @@ class MainWindow(QMainWindow):
         data_menu.addAction(open_data_panel_action)
 
     def init_tasks_menu(self):
-        decompress_dicom_files_task_action = QAction(constants.MOSAMATICDESKTOP_TASKS_MENU_DECOMPRESS_DICOM_FILES_TASK_ACTION_TEXT, self)
+        decompress_dicom_files_task_action = QAction('Decompress DICOM files', self)
         decompress_dicom_files_task_action.triggered.connect(self.handle_decompress_dicom_files_task_action)
-        tasks_menu = self.menuBar().addMenu(constants.MOSAMATICDESKTOP_TASKS_MENU_TEXT)
+        tasks_menu = self.menuBar().addMenu('Tasks')
         tasks_menu.addAction(decompress_dicom_files_task_action)
 
     def init_pipelines_menu(self):
-        default_pipeline_action = QAction(constants.MOSAMATICDESKTOP_PIPELINES_MENU_DEFAULT_PIPELINE_ACTION_TEXT, self)
+        default_pipeline_action = QAction('Default pipeline', self)
         default_pipeline_action.triggered.connect(self.handle_default_pipeline_action)
-        pipelines_menu = self.menuBar().addMenu(constants.MOSAMATICDESKTOP_PIPELINES_MENU_TEXT)
+        pipelines_menu = self.menuBar().addMenu('Pipelines')
         pipelines_menu.addAction(default_pipeline_action)
 
     def init_status_bar(self):
-        self.set_status(constants.MOSAMATICDESKTOP_STATUS_READY)
+        self.set_status('Ready')
 
     def init_data_manager(self):
         self.data_manager().add_listener(self.data_panel())
-        self.data_manager().load_data_from_file(self.settings().get(constants.MOSAMATICDESKTOP_DATA_OBJECTS_KEY))
+        self.data_manager().load_data_from_file(self.settings().get('mainwindow/data_objects'))
 
     # GETTERS
 
@@ -126,15 +132,11 @@ class MainWindow(QMainWindow):
     def main_panel(self):
         if not self._main_panel:
             self._main_panel = MainPanel(self)
-            self._main_panel.add_panel(
-                self.data_panel(), constants.MOSAMATICDESKTOP_DATA_PANEL_NAME)
-            self._main_panel.add_panel(
-                self.settings_panel(), constants.MOSAMATICDESKTOP_SETTINGS_PANEL_NAME)
-            self._main_panel.add_panel(
-                self.default_pipeline_panel(), constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_NAME)
-            self._main_panel.add_panel(
-                self.decompress_dicom_files_task_panel(), constants.MOSAMATICDESKTOP_DECOMPRESS_DICOM_FILES_TASK_PANEL_NAME)
-            self._main_panel.select_panel(constants.MOSAMATICDESKTOP_SETTINGS_PANEL_NAME)
+            self._main_panel.add_panel(self.data_panel(), 'datapanel')
+            self._main_panel.add_panel(self.settings_panel(), 'settingspanel')
+            self._main_panel.add_panel(self.default_pipeline_panel(), 'defaultpipelinepanel')
+            self._main_panel.add_panel(self.decompress_dicom_files_task_panel(), 'decompressdicomfilespanel')
+            self._main_panel.select_panel('settingspanel')
         return self._main_panel
     
     def settings_panel(self):
@@ -187,10 +189,10 @@ class MainWindow(QMainWindow):
     # EVENT HANDLERS
 
     def handle_open_settings_panel_action(self):
-        self.main_panel().select_panel(constants.MOSAMATICDESKTOP_SETTINGS_PANEL_NAME)
+        self.main_panel().select_panel('settingspanel')
 
     def handle_open_data_panel_action(self):
-        self.main_panel().select_panel(constants.MOSAMATICDESKTOP_DATA_PANEL_NAME)
+        self.main_panel().select_panel('datapanel')
 
     def handle_load_dicom_file_action(self):
         self.load_dicom_file_dialog().exec()
@@ -205,24 +207,24 @@ class MainWindow(QMainWindow):
         pass
 
     def handle_decompress_dicom_files_task_action(self):
-        self.main_panel().select_panel(constants.MOSAMATICDESKTOP_DECOMPRESS_DICOM_FILES_TASK_PANEL_NAME)
+        self.main_panel().select_panel('decompressdicomfilespanel')
 
     def handle_default_pipeline_action(self):
-        self.main_panel().select_panel(constants.MOSAMATICDESKTOP_DEFAULT_PIPELINE_PANEL_NAME)
+        self.main_panel().select_panel('defaultpipelinepanel')
 
     def showEvent(self, event):
         return super().showEvent(event)
 
     def closeEvent(self, event):
         self.save_geometry_and_state()
-        self.settings().set(constants.MOSAMATICDESKTOP_DATA_OBJECTS_KEY, self.data_manager().save_data_to_file())
+        self.settings().set('mainwindow/data_objets', self.data_manager().save_data_to_file())
         return super().closeEvent(event)
     
     # MISCELLANEOUS
 
     def load_geometry_and_state(self):
-        geometry = self.settings().get(constants.MOSAMATICDESKTOP_WINDOW_GEOMETRY_KEY)
-        state = self.settings().get(constants.MOSAMATICDESKTOP_WINDOW_STATE_KEY)
+        geometry = self.settings().get('mainwindow/geometry')
+        state = self.settings().get('mainwindow/state')
         if isinstance(geometry, QByteArray) and self.restoreGeometry(geometry):
             if isinstance(state, QByteArray):
                 self.restoreState(state)
@@ -230,13 +232,11 @@ class MainWindow(QMainWindow):
         return False
 
     def save_geometry_and_state(self):
-        self.settings().set(
-            constants.MOSAMATICDESKTOP_WINDOW_GEOMETRY_KEY, self.saveGeometry())
-        self.settings().set(
-            constants.MOSAMATICDESKTOP_WINDOW_STATE_KEY, self.saveState())
+        self.settings().set('mainwindow/geometry', self.saveGeometry())
+        self.settings().set('mainwindow/state', self.saveState())
 
     def set_default_size_and_position(self):
-        self.resize(constants.MOSAMATICDESKTOP_WINDOW_W, constants.MOSAMATICDESKTOP_WINDOW_H)
+        self.resize(WINDOW_W, WINDOW_H)
         self.center_window()
 
     def center_window(self):

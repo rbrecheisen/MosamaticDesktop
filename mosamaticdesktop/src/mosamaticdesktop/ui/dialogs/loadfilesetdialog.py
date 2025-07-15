@@ -8,10 +8,10 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-import mosamaticdesktop.ui.constants as constants
-
 from mosamaticdesktop.ui.dialogs.dialog import Dialog
 from mosamaticdesktop.ui.settings import Settings
+
+WINDOW_TITLE = 'Select directory'
 
 
 class LoadFileSetDialog(Dialog):
@@ -27,12 +27,12 @@ class LoadFileSetDialog(Dialog):
 
     def directory_path_label(self):
         if not self._directory_path_label:
-            self._directory_path_label = QLabel(constants.MOSAMATICDESKTOP_LOAD_DIRECTORY_DIALOG_DIRECTORY_PATH_LABEL_TEXT)
+            self._directory_path_label = QLabel('Directory path')
         return self._directory_path_label
     
     def directory_path_line_edit(self):
         if not self._directory_path_line_edit:
-            self._directory_path_line_edit = QLineEdit(placeholderText=constants.MOSAMATICDESKTOP_LOAD_DIRECTORY_DIALOG_DIRECTORY_PATH_TEXT_EDIT_PLACEHOLDER_TEXT)
+            self._directory_path_line_edit = QLineEdit(placeholderText='Enter directory path')
         return self._directory_path_line_edit
     
     def name_label(self):
@@ -47,13 +47,13 @@ class LoadFileSetDialog(Dialog):
     
     def open_directory_select_dialog_button(self):
         if not self._open_directory_select_dialog_button:
-            self._open_directory_select_dialog_button = QPushButton(constants.MOSAMATICDESKTOP_LOAD_DIRECTORY_DIALOG_OPEN_SELECT_DIRECTORY_DIALOG_BUTTON_TEXT)
+            self._open_directory_select_dialog_button = QPushButton('Select directory')
             self._open_directory_select_dialog_button.clicked.connect(self.handle_open_directory_select_dialog_button)
         return self._open_directory_select_dialog_button
     
     def load_button(self):
         if not self._load_button:
-            self._load_button = QPushButton(constants.MOSAMATICDESKTOP_LOAD_DIRECTORY_DIALOG_LOAD_BUTTON_TEXT)
+            self._load_button = QPushButton('Load')
             self._load_button.clicked.connect(self.handle_load_button)
             self._load_button.setEnabled(False)
         return self._load_button
@@ -70,13 +70,13 @@ class LoadFileSetDialog(Dialog):
 
     def handle_open_directory_select_dialog_button(self):
         self.load_button().setEnabled(False)
-        last_directory = Settings().get(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY)
-        directory_path = QFileDialog.getExistingDirectory(self, constants.MOSAMATICDESKTOP_LOAD_DIRECTORY_DIALOG_OPEN_SELECT_DIRECTORY_PATH_DIALOG_WINDOW_TITLE, dir=last_directory)
+        last_directory = Settings().get('last_directory')
+        directory_path = QFileDialog.getExistingDirectory(self, WINDOW_TITLE, dir=last_directory)
         if directory_path:
             self.directory_path_line_edit().setText(directory_path)
             self.load_button().setEnabled(True)
             directory = os.path.dirname(directory_path)
-            Settings().set(constants.MOSAMATICDESKTOP_LAST_DIRECTORY_KEY, directory)
+            Settings().set('last_directory', directory)
 
     def handle_load_button(self):
         raise NotImplementedError()

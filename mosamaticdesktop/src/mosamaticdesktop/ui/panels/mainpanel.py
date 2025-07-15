@@ -8,13 +8,14 @@ from PySide6.QtWidgets import (
     QDockWidget,
 )
 
-import mosamaticdesktop.ui.constants as constants
-
 from mosamaticdesktop.ui.settings import Settings
 from mosamaticdesktop.ui.panels.stackedpanel import StackedPanel
 from mosamaticdesktop.core.utils.logmanager import LogManager
 
 LOG = LogManager()
+
+PANEL_NAME = 'mainpanel'
+DONATE_URL = 'https://rbeesoft.nl/wordpress/'
 
 
 class MainPanel(QDockWidget):
@@ -34,7 +35,7 @@ class MainPanel(QDockWidget):
         layout.addWidget(self.stacked_panel())
         container = QWidget()
         container.setLayout(layout)
-        self.setObjectName(constants.MOSAMATICDESKTOP_MAIN_PANEL_NAME)
+        self.setObjectName(PANEL_NAME)
         self.setWidget(container)
 
     # GETTERS
@@ -47,13 +48,13 @@ class MainPanel(QDockWidget):
     def title_label(self):
         if not self._title_label:
             self._title_label = QLabel('')
-            self._title_label.setStyleSheet(constants.MOSAMATICDESKTOP_MAIN_PANEL_NAME_TITLE_LABEL_STYLESHEET)
+            self._title_label.setStyleSheet('color: black; font-weight: bold; font-size: 14pt;')
         return self._title_label
     
     def donate_button(self):
         if not self._donate_button:
-            self._donate_button = QPushButton(constants.MOSAMATICDESKTOP_DONATE_BUTTON_TEXT)
-            self._donate_button.setStyleSheet(constants.MOSAMATICDESKTOP_DONATE_BUTTON_STYLESHEET)
+            self._donate_button = QPushButton('Donate')
+            self._donate_button.setStyleSheet('background-color: blue; color: white; font-weight: bold;')
             self._donate_button.clicked.connect(self.handle_donate_button)
         return self._donate_button
     
@@ -78,4 +79,4 @@ class MainPanel(QDockWidget):
     # EVENT HANDLERS
 
     def handle_donate_button(self):
-        webbrowser.open(constants.MOSAMATICDESKTOP_DONATE_URL)
+        webbrowser.open(DONATE_URL)

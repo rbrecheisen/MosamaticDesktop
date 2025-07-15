@@ -7,9 +7,10 @@ from PySide6.QtWidgets import (
     QLabel,
 )
 
-import mosamaticdesktop.ui.constants as constants
-
 from mosamaticdesktop.core.utils.logmanagerlistener import LogManagerListener
+
+PANEL_TITLE = 'Output log'
+PANEL_NAME = 'logpanel'
 
 
 class LogPanel(QDockWidget, LogManagerListener):
@@ -21,7 +22,7 @@ class LogPanel(QDockWidget, LogManagerListener):
 
     def title_label(self):
         if not self._title_label:
-            self._title_label = QLabel(constants.MOSAMATICDESKTOP_LOG_PANEL_TITLE)
+            self._title_label = QLabel(PANEL_TITLE)
         return self._title_label
 
     def text_edit(self):
@@ -30,7 +31,7 @@ class LogPanel(QDockWidget, LogManagerListener):
         return self._text_edit
     
     def init_layout(self):
-        clear_logs_button = QPushButton(constants.MOSAMATICDESKTOP_LOG_PANEL_CLEAR_LOGS_BUTTON)
+        clear_logs_button = QPushButton('Clear log')
         clear_logs_button.clicked.connect(self.handle_clear_logs_button)
         layout = QVBoxLayout()
         # layout.addWidget(self.title_label())
@@ -38,7 +39,7 @@ class LogPanel(QDockWidget, LogManagerListener):
         layout.addWidget(clear_logs_button)
         container = QWidget()
         container.setLayout(layout)
-        self.setObjectName(constants.MOSAMATICDESKTOP_LOG_PANEL_NAME)
+        self.setObjectName(PANEL_NAME)
         self.setWindowTitle(self.title_label().text())
         self.setWidget(container)
 

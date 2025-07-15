@@ -10,16 +10,17 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt
 
-import mosamaticdesktop.ui.constants as constants
-
 from mosamaticdesktop.ui.settings import Settings
 from mosamaticdesktop.ui.panels.defaultpanel import DefaultPanel
+
+PANEL_TITLE = 'Settings'
+PANEL_NAME = 'settingspanel'
 
 
 class SettingsPanel(DefaultPanel):
     def __init__(self):
         super(SettingsPanel, self).__init__()
-        self.set_title(constants.MOSAMATICDESKTOP_SETTINGS_PANEL_TITLE)
+        self.set_title(PANEL_TITLE)
         self._settings_file_path_label = None
         self._settings = None
         self._settings_table_widget = None
@@ -53,12 +54,11 @@ class SettingsPanel(DefaultPanel):
                 if isinstance(value, str) or isinstance(value, int) or isinstance(value, bool) or isinstance(value, float):
                     self._settings_table_widget.setItem(row_index, 1, QTableWidgetItem(str(value)))
                 else:
-                    self._settings_table_widget.setItem(row_index, 1, QTableWidgetItem(constants.MOSAMATICDESKTOP_SETTINGS_PANEL_CANNOT_DISPLAY_MESSAGE))
+                    self._settings_table_widget.setItem(row_index, 1, QTableWidgetItem('Cannot diaplay (binary data)'))
                 row_index += 1
             self._settings_table_widget.resizeColumnsToContents()
             self._settings_table_widget.sortItems(0, Qt.AscendingOrder)
-            self._settings_table_widget.setHorizontalHeaderLabels([
-                constants.MOSAMATICDESKTOP_SETTINGS_PANEL_NAME_COLUMN_NAME, constants.MOSAMATICDESKTOP_SETTINGS_PANEL_VALUE_COLUMN_NAME])
+            self._settings_table_widget.setHorizontalHeaderLabels(['NAME', 'VALUE'])
             self._settings_table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
             self._settings_table_widget.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
             self._settings_table_widget.horizontalHeader().setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -77,7 +77,7 @@ class SettingsPanel(DefaultPanel):
         layout.addWidget(self.settings_table_widget())
         layout.addWidget(self.clear_settings_button())
         self.setLayout(layout)
-        self.setObjectName(constants.MOSAMATICDESKTOP_SETTINGS_PANEL_NAME)
+        self.setObjectName(PANEL_NAME)
 
     def handle_clear_settings_button(self):
         import os

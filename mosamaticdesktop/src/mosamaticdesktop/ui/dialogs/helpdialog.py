@@ -1,5 +1,3 @@
-import mosamaticdesktop.ui.constants as constants
-
 from mosamaticdesktop.ui.dialogs.dialog import Dialog
 
 
