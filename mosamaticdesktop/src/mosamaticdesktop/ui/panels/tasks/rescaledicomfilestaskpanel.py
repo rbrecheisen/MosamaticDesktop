@@ -3,6 +3,7 @@ import os
 from PySide6.QtWidgets import (
     QLineEdit,
     QCheckBox,
+    QSpinBox,
     QHBoxLayout,
     QVBoxLayout,
     QFormLayout,
@@ -10,12 +11,18 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QMessageBox,
 )
+from PySide6.QtCore import (
+    QThread, 
+    Slot,
+)
 
 from mosamaticdesktop.core.utils.logmanager import LogManager
-from mosamaticdesktop.ui.panels.defaultpanel import DefaultPanel
+from mosamaticdesktop.ui.panels.taskpanel import TaskPanel
 from mosamaticdesktop.ui.settings import Settings
 from mosamaticdesktop.ui.utils import is_macos
-from mosamatic.tasks import DecompressDicomFilesTask
+from mosamaticdesktop.ui.worker import Worker
+
+from mosamatic.tasks import RescaleDicomFilesTask
 
 LOG = LogManager()
 
@@ -23,7 +30,7 @@ PANEL_TITLE = 'Rescale DICOM files'
 PANEL_NAME = 'rescaledicomfiles'
 
 
-class RescaleDicomFilesTaskPanel(DefaultPanel):
+class RescaleDicomFilesTaskPanel(TaskPanel):
     def __init__(self):
         super(RescaleDicomFilesTaskPanel, self).__init__()
         self.set_title(PANEL_TITLE)
@@ -31,10 +38,14 @@ class RescaleDicomFilesTaskPanel(DefaultPanel):
         self._images_dir_select_button = None
         self._output_dir_line_edit = None
         self._output_dir_select_button = None
+        self._target_size_spinbox = None
         self._overwrite_checkbox = None
         self._form_layout = None
         self._run_task_button = None
         self._settings = None
+        self._task = None
+        self._worker = None
+        self._thread = None
         self.init_layout()
 
     def images_dir_line_edit(self):
@@ -59,10 +70,18 @@ class RescaleDicomFilesTaskPanel(DefaultPanel):
             self._output_dir_select_button.clicked.connect(self.handle_output_dir_select_button)
         return self._output_dir_select_button
     
+    def target_size_spinbox(self):
+        if not self._target_size_spinbox:
+            self._target_size_spinbox = QSpinBox()
+            self._target_size_spinbox.setMinimum(0)
+            self._target_size_spinbox.setMaximum(1024)
+            self._target_size_spinbox.setValue(int(self.settings().get(f'{PANEL_NAME}/target_size', 512)))
+        return self._target_size_spinbox
+
     def overwrite_checkbox(self):
         if not self._overwrite_checkbox:
             self._overwrite_checkbox = QCheckBox('')
-            self._overwrite_checkbox.setChecked(self.settings().get(f'{PANEL_NAME}/overwrite', True))
+            self._overwrite_checkbox.setChecked(self.settings().get_bool(f'{PANEL_NAME}/overwrite', True))
         return self._overwrite_checkbox
     
     def form_layout(self):
@@ -93,6 +112,7 @@ class RescaleDicomFilesTaskPanel(DefaultPanel):
         output_dir_layout.addWidget(self.output_dir_select_button())
         self.form_layout().addRow('Images directory', images_dir_layout)
         self.form_layout().addRow('Output directory', output_dir_layout)
+        self.form_layout().addRow('Rescale target size', self.target_size_spinbox())
         self.form_layout().addRow('Overwrite', self.overwrite_checkbox())
         layout = QVBoxLayout()
         layout.addLayout(self.form_layout())
@@ -122,10 +142,35 @@ class RescaleDicomFilesTaskPanel(DefaultPanel):
                 error_message += f' - {error}\n'
             QMessageBox.information(self, 'Error', error_message)
         else:
-            print(f'Running task...')
-            task = DecompressDicomFilesTask(
-                self.images_dir_line_edit().text(), self.output_dir_line_edit().text(), self.overwrite_checkbox().isChecked())
-            task.run()
+            LOG.info('Running task...')
+            self.save_inputs_and_parameters()
+            self._task = RescaleDicomFilesTask(
+                self.images_dir_line_edit().text(), 
+                self.output_dir_line_edit().text(), 
+                self.target_size_spinbox().value(),
+                self.overwrite_checkbox().isChecked()
+            )
+            # self._task.run()
+            self._worker = Worker(self._task)
+            self._thread = QThread()
+            self._worker.moveToThread(self._thread)
+            self._thread.started.connect(self._worker.run)
+            self._worker.progress.connect(self.handle_progress)
+            self._worker.status.connect(self.handle_status)
+            self._worker.finished.connect(self._thread.quit)
+            self._worker.finished.connect(self._worker.deleteLater)
+            self._thread.finished.connect(self._thread.deleteLater)
+            self._thread.start()
+
+    @Slot(int)
+    def handle_progress(self, progress):
+        LOG.info(f'Progress: {progress} / 100%')
+
+    @Slot(str)
+    def handle_status(self, status):
+        LOG.info(f'Status: {status}')
+
+    # HELPERS
 
     def check_inputs_and_parameters(self):
         errors = []
@@ -138,3 +183,8 @@ class RescaleDicomFilesTaskPanel(DefaultPanel):
         elif os.path.isdir(self.output_dir_line_edit().text()) and not self.overwrite_checkbox().isChecked():
             errors.append('Output directory exists but overwrite=False. Please remove output directory first')
         return errors
+    
+    def save_inputs_and_parameters(self):
+        self.settings().set(f'{PANEL_NAME}/images_dir', self.images_dir_line_edit().text())
+        self.settings().set(f'{PANEL_NAME}/output_dir', self.output_dir_line_edit().text())
+        self.settings().set(f'{PANEL_NAME}/overwrite', self.overwrite_checkbox().isChecked())

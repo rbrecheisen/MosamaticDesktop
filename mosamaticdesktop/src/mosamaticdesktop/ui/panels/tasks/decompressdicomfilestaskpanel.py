@@ -10,11 +10,17 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QMessageBox,
 )
+from PySide6.QtCore import (
+    QThread, 
+    Slot,
+)
 
 from mosamaticdesktop.core.utils.logmanager import LogManager
-from mosamaticdesktop.ui.panels.defaultpanel import DefaultPanel
+from mosamaticdesktop.ui.panels.taskpanel import TaskPanel
 from mosamaticdesktop.ui.settings import Settings
 from mosamaticdesktop.ui.utils import is_macos
+from mosamaticdesktop.ui.worker import Worker
+
 from mosamatic.tasks import DecompressDicomFilesTask
 
 LOG = LogManager()
@@ -23,7 +29,7 @@ PANEL_TITLE = 'Decompress DICOM files'
 PANEL_NAME = 'decompressdicomfiles'
 
 
-class DecompressDicomFilesTaskPanel(DefaultPanel):
+class DecompressDicomFilesTaskPanel(TaskPanel):
     def __init__(self):
         super(DecompressDicomFilesTaskPanel, self).__init__()
         self.set_title(PANEL_TITLE)
@@ -35,6 +41,9 @@ class DecompressDicomFilesTaskPanel(DefaultPanel):
         self._form_layout = None
         self._run_task_button = None
         self._settings = None
+        self._task = None
+        self._worker = None
+        self._thread = None
         self.init_layout()
 
     def images_dir_line_edit(self):
@@ -62,7 +71,7 @@ class DecompressDicomFilesTaskPanel(DefaultPanel):
     def overwrite_checkbox(self):
         if not self._overwrite_checkbox:
             self._overwrite_checkbox = QCheckBox('')
-            self._overwrite_checkbox.setChecked(self.settings().get(f'{PANEL_NAME}/overwrite', True))
+            self._overwrite_checkbox.setChecked(self.settings().get_bool(f'{PANEL_NAME}/overwrite', True))
         return self._overwrite_checkbox
     
     def form_layout(self):
@@ -100,6 +109,8 @@ class DecompressDicomFilesTaskPanel(DefaultPanel):
         self.setLayout(layout)
         self.setObjectName(PANEL_NAME)
 
+    # EVENTS
+
     def handle_images_dir_select_button(self):
         last_directory = self.settings().get('last_directory')
         directory = QFileDialog.getExistingDirectory(dir=last_directory)
@@ -122,13 +133,34 @@ class DecompressDicomFilesTaskPanel(DefaultPanel):
                 error_message += f' - {error}\n'
             QMessageBox.information(self, 'Error', error_message)
         else:
-            LOG.info(f'Running task...')
-            task = DecompressDicomFilesTask(
+            LOG.info('Running task...')
+            self.save_inputs_and_parameters()
+            self._task = DecompressDicomFilesTask(
                 self.images_dir_line_edit().text(), 
                 self.output_dir_line_edit().text(), 
                 self.overwrite_checkbox().isChecked()
             )
-            task.run()
+            # self._task.run()
+            self._worker = Worker(self._task)
+            self._thread = QThread()
+            self._worker.moveToThread(self._thread)
+            self._thread.started.connect(self._worker.run)
+            self._worker.progress.connect(self.handle_progress)
+            self._worker.status.connect(self.handle_status)
+            self._worker.finished.connect(self._thread.quit)
+            self._worker.finished.connect(self._worker.deleteLater)
+            self._thread.finished.connect(self._thread.deleteLater)
+            self._thread.start()
+
+    @Slot(int)
+    def handle_progress(self, progress):
+        LOG.info(f'Progress: {progress} / 100%')
+
+    @Slot(str)
+    def handle_status(self, status):
+        LOG.info(f'Status: {status}')
+
+    # HELPERS
 
     def check_inputs_and_parameters(self):
         errors = []
@@ -141,3 +173,8 @@ class DecompressDicomFilesTaskPanel(DefaultPanel):
         elif os.path.isdir(self.output_dir_line_edit().text()) and not self.overwrite_checkbox().isChecked():
             errors.append('Output directory exists but overwrite=False. Please remove output directory first')
         return errors
+    
+    def save_inputs_and_parameters(self):
+        self.settings().set(f'{PANEL_NAME}/images_dir', self.images_dir_line_edit().text())
+        self.settings().set(f'{PANEL_NAME}/output_dir', self.output_dir_line_edit().text())
+        self.settings().set(f'{PANEL_NAME}/overwrite', self.overwrite_checkbox().isChecked())

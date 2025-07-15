@@ -12,11 +12,17 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QMessageBox,
 )
+from PySide6.QtCore import (
+    QThread, 
+    Slot,
+)
 
 from mosamaticdesktop.core.utils.logmanager import LogManager
 from mosamaticdesktop.ui.panels.defaultpanel import DefaultPanel
 from mosamaticdesktop.ui.settings import Settings
 from mosamaticdesktop.ui.utils import is_macos
+from mosamaticdesktop.ui.worker import Worker
+
 from mosamatic.pipelines import DefaultPipeline
 
 LOG = LogManager()
@@ -47,7 +53,9 @@ class DefaultPipelinePanel(DefaultPanel):
         self._form_layout = None
         self._run_pipeline_button = None
         self._settings = None
-        self.init_help_dialog()
+        self._task = None
+        self._worker = None
+        self._thread = None
         self.init_layout()
 
     def images_dir_line_edit(self):
@@ -91,7 +99,7 @@ class DefaultPipelinePanel(DefaultPanel):
             self._target_size_spinbox = QSpinBox()
             self._target_size_spinbox.setMinimum(0)
             self._target_size_spinbox.setMaximum(1024)
-            self._target_size_spinbox.setValue(int(self.settings().get(f'{PANEL_NAME}/target_size', 512)))
+            self._target_size_spinbox.setValue(self.settings().get_int(f'{PANEL_NAME}/target_size', 512))
         return self._target_size_spinbox
     
     def model_type_combobox(self):
@@ -113,25 +121,25 @@ class DefaultPipelinePanel(DefaultPanel):
     def fig_width_spinbox(self):
         if not self._fig_width_spinbox:
             self._fig_width_spinbox = QSpinBox()
-            self._fig_width_spinbox.setValue(int(self.settings().get(f'{PANEL_NAME}/fig_width', default=10)))
+            self._fig_width_spinbox.setValue(self.settings().get_int(f'{PANEL_NAME}/fig_width', default=10))
         return self._fig_width_spinbox
     
     def fig_height_spinbox(self):
         if not self._fig_height_spinbox:
             self._fig_height_spinbox = QSpinBox()
-            self._fig_height_spinbox.setValue(int(self.settings().get(f'{PANEL_NAME}/fig_height', default=10)))
+            self._fig_height_spinbox.setValue(self.settings().get_int(f'{PANEL_NAME}/fig_height', default=10))
         return self._fig_height_spinbox
     
     def full_scan_checkbox(self):
         if not self._full_scan_checkbox:
             self._full_scan_checkbox = QCheckBox('')
-            self._full_scan_checkbox.setChecked(bool(self.settings().get(f'{PANEL_NAME}/full_scan', False)))
+            self._full_scan_checkbox.setChecked(self.settings().get_bool(f'{PANEL_NAME}/full_scan', False))
         return self._full_scan_checkbox
 
     def overwrite_checkbox(self):
         if not self._overwrite_checkbox:
             self._overwrite_checkbox = QCheckBox('')
-            self._overwrite_checkbox.setChecked(bool(self.settings().get(f'{PANEL_NAME}/overwrite', True)))
+            self._overwrite_checkbox.setChecked(self.settings().get_bool(f'{PANEL_NAME}/overwrite', True))
         return self._overwrite_checkbox
     
     def form_layout(self):
@@ -177,10 +185,8 @@ class DefaultPipelinePanel(DefaultPanel):
         self.form_layout().addRow('Full scan', self.full_scan_checkbox())
         self.form_layout().addRow('Overwrite', self.overwrite_checkbox())
         layout = QVBoxLayout()
-        # layout.addWidget(self.show_help_button())
         layout.addLayout(self.form_layout())
         layout.addWidget(self.run_pipeline_button())
-        # self.setLayout(self.form_layout())
         self.setLayout(layout)
         self.setObjectName(PANEL_NAME)
 
@@ -225,9 +231,9 @@ class DefaultPipelinePanel(DefaultPanel):
                 error_message += f' - {error}\n'
             QMessageBox.information(self, 'Error', error_message)
         else:
-            LOG.info(f'Saving inputs/parameters and running pipeline...')
+            LOG.info('Running pipeline...')
             self.save_inputs_and_parameters()
-            pipeline = DefaultPipeline(
+            self._task = DefaultPipeline(
                 images_dir=self.images_dir_line_edit().text(),
                 model_files_dir=self.model_files_dir_line_edit().text(),
                 output_dir=self.output_dir_line_edit().text(),
@@ -239,8 +245,25 @@ class DefaultPipelinePanel(DefaultPanel):
                 full_scan=self.full_scan_checkbox().isChecked(),
                 overwrite=self.overwrite_checkbox().isChecked(),
             )
-            pipeline.run()
-            QMessageBox.information(self, 'Information', f'Pipeline has finished. You can find its output directories here: {self.output_dir_line_edit().text()}')
+            # self._task.run()
+            self._worker = Worker(self._task)
+            self._thread = QThread()
+            self._worker.moveToThread(self._thread)
+            self._thread.started.connect(self._worker.run)
+            self._worker.progress.connect(self.handle_progress)
+            self._worker.status.connect(self.handle_status)
+            self._worker.finished.connect(self._thread.quit)
+            self._worker.finished.connect(self._worker.deleteLater)
+            self._thread.finished.connect(self._thread.deleteLater)
+            self._thread.start()
+
+    @Slot(int)
+    def handle_progress(self, progress):
+        LOG.info(f'Progress: {progress} / 100%')
+
+    @Slot(str)
+    def handle_status(self, status):
+        LOG.info(f'Status: {status}')
 
     def check_inputs_and_parameters(self):
         errors = []

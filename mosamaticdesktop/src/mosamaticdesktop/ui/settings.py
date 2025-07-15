@@ -23,6 +23,25 @@ class Settings(QSettings):
             return default
         return value
     
+    def get_int(self, name, default=None):
+        try:
+            return int(self.get(name, default))
+        except ValueError as e:
+            return default
+        
+    def get_bool(self, name, default=None):
+        try:
+            value = self.get(name, default)
+            if value and value != '':
+                if value == '0' or value.lower() == 'false':
+                    return False
+                elif value == '1' or value.lower() == 'true':
+                    return True
+                else:
+                    return default
+        except ValueError as e:
+            return default
+    
     def set(self, name, value):
         name = self.prepend_bundle_identifier_and_name(name)
         self.setValue(name, value)
