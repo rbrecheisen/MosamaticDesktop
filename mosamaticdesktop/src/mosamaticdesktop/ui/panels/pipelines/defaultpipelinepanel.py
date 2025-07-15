@@ -152,7 +152,7 @@ class DefaultPipelinePanel(DefaultPanel):
     def run_pipeline_button(self):
         if not self._run_pipeline_button:
             self._run_pipeline_button = QPushButton('Run pipelne')
-            self._run_pipeline_button.setStyleSheet('color: white; background-color: blue; font-weight: bold;')
+            # self._run_pipeline_button.setStyleSheet('color: white; background-color: blue; font-weight: bold;')
             self._run_pipeline_button.clicked.connect(self.handle_run_pipeline_button)
         return self._run_pipeline_button
     
@@ -232,6 +232,7 @@ class DefaultPipelinePanel(DefaultPanel):
             QMessageBox.information(self, 'Error', error_message)
         else:
             LOG.info('Running pipeline...')
+            self.run_pipeline_button().setEnabled(False)
             self.save_inputs_and_parameters()
             self._task = DefaultPipeline(
                 images_dir=self.images_dir_line_edit().text(),
@@ -252,6 +253,7 @@ class DefaultPipelinePanel(DefaultPanel):
             self._thread.started.connect(self._worker.run)
             self._worker.progress.connect(self.handle_progress)
             self._worker.status.connect(self.handle_status)
+            self._worker.finished.connect(self.handle_finished)
             self._worker.finished.connect(self._thread.quit)
             self._worker.finished.connect(self._worker.deleteLater)
             self._thread.finished.connect(self._thread.deleteLater)
@@ -264,6 +266,10 @@ class DefaultPipelinePanel(DefaultPanel):
     @Slot(str)
     def handle_status(self, status):
         LOG.info(f'Status: {status}')
+
+    @Slot()
+    def handle_finished(self):
+        self.run_pipeline_button().setEnabled(True)
 
     def check_inputs_and_parameters(self):
         errors = []

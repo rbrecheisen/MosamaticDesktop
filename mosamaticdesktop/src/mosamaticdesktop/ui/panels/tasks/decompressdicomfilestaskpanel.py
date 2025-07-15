@@ -84,7 +84,7 @@ class DecompressDicomFilesTaskPanel(TaskPanel):
     def run_task_button(self):
         if not self._run_task_button:
             self._run_task_button = QPushButton('Run task')
-            self._run_task_button.setStyleSheet('color: white; background-color: blue; font-weight: bold;')
+            # self._run_task_button.setStyleSheet('color: white; background-color: blue; font-weight: bold;')
             self._run_task_button.clicked.connect(self.handle_run_task_button)
         return self._run_task_button
     
@@ -134,6 +134,7 @@ class DecompressDicomFilesTaskPanel(TaskPanel):
             QMessageBox.information(self, 'Error', error_message)
         else:
             LOG.info('Running task...')
+            self.run_task_button().setEnabled(False)
             self.save_inputs_and_parameters()
             self._task = DecompressDicomFilesTask(
                 self.images_dir_line_edit().text(), 
@@ -147,6 +148,7 @@ class DecompressDicomFilesTaskPanel(TaskPanel):
             self._thread.started.connect(self._worker.run)
             self._worker.progress.connect(self.handle_progress)
             self._worker.status.connect(self.handle_status)
+            self._worker.finished.connect(self.handle_finished)
             self._worker.finished.connect(self._thread.quit)
             self._worker.finished.connect(self._worker.deleteLater)
             self._thread.finished.connect(self._thread.deleteLater)
@@ -159,6 +161,10 @@ class DecompressDicomFilesTaskPanel(TaskPanel):
     @Slot(str)
     def handle_status(self, status):
         LOG.info(f'Status: {status}')
+
+    @Slot()
+    def handle_finished(self):
+        self.run_task_button().setEnabled(True)
 
     # HELPERS
 
