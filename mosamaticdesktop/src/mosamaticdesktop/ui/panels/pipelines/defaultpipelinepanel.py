@@ -151,7 +151,7 @@ class DefaultPipelinePanel(DefaultPanel):
     
     def run_pipeline_button(self):
         if not self._run_pipeline_button:
-            self._run_pipeline_button = QPushButton('Run pipelne')
+            self._run_pipeline_button = QPushButton('Run pipeline')
             # self._run_pipeline_button.setStyleSheet('color: white; background-color: blue; font-weight: bold;')
             self._run_pipeline_button.clicked.connect(self.handle_run_pipeline_button)
         return self._run_pipeline_button
