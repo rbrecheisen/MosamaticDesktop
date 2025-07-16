@@ -21,7 +21,7 @@ test_sources = [
     "tests",
 ]
 requires = [
-    "pyside6>=6.9",
+    "PySide6-Essentials>=6.9",
     "mosamatic-cli>=1.5.10",
     "click<8.1.8",
     "pendulum",

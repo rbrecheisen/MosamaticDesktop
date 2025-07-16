@@ -32,6 +32,7 @@ if /I "%~1"=="" (
 
 ) else if /I "%~1"=="--package" (
 
+    rmdir /s /q mosamaticdesktop\dist
     @rem Hack: packaging fails because of long TensorFlow header file paths
     rmdir /s /q "mosamaticdesktop\build\mosamaticdesktop\windows\app\src\app_packages\tensorflow\include"
     cd mosamaticdesktop
