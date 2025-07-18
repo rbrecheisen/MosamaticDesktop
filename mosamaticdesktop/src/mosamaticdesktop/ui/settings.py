@@ -32,13 +32,15 @@ class Settings(QSettings):
     def get_bool(self, name, default=None):
         try:
             value = self.get(name, default)
-            if value and value != '':
+            if value and isinstance(value, str):
                 if value == '0' or value.lower() == 'false':
                     return False
                 elif value == '1' or value.lower() == 'true':
                     return True
                 else:
                     return default
+            if value and isinstance(value, bool):
+                return value
         except ValueError as e:
             return default
     

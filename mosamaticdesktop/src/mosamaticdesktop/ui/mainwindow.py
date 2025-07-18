@@ -18,6 +18,9 @@ from mosamaticdesktop.ui.panels.datapanel import DataPanel
 from mosamaticdesktop.ui.panels.logpanel import LogPanel
 from mosamaticdesktop.ui.panels.tasks.decompressdicomfilestaskpanel import DecompressDicomFilesTaskPanel
 from mosamaticdesktop.ui.panels.tasks.rescaledicomfilestaskpanel import RescaleDicomFilesTaskPanel
+from mosamaticdesktop.ui.panels.tasks.segmentmusclefatl3tensorflowtaskpanel import SegmentMuscleFatL3TensorFlowTaskPanel
+from mosamaticdesktop.ui.panels.tasks.createpngsfromsegmentationstaskpanel import CreatePngsFromSegmentationsTaskPanel
+from mosamaticdesktop.ui.panels.tasks.calculatescorestaskpanel import CalculateScoresTaskPanel
 from mosamaticdesktop.ui.panels.pipelines.defaultpipelinepanel import DefaultPipelinePanel
 from mosamaticdesktop.ui.dialogs.loaddicomfiledialog import LoadDicomFileDialog
 from mosamaticdesktop.ui.dialogs.loadmultidicomfiledialog import LoadMultiDicomFileDialog
@@ -47,6 +50,9 @@ class MainWindow(QMainWindow):
         self._log_panel = None
         self._decompress_dicom_files_task_panel = None
         self._rescale_dicom_files_task_panel = None
+        self._segment_muscle_fat_l3_tensorflow_task_panel = None
+        self._create_pngs_from_segmentations_task_panel = None
+        self._calculate_scores_task_panel = None
         self._default_pipeline_panel = None
         self._load_dicom_file_dialog = None
         self._load_multi_dicom_file_dialog = None
@@ -105,9 +111,18 @@ class MainWindow(QMainWindow):
         decompress_dicom_files_task_action.triggered.connect(self.handle_decompress_dicom_files_task_action)
         rescale_dicom_files_task_action = QAction('Rescale DICOM files', self)
         rescale_dicom_files_task_action.triggered.connect(self.handle_rescale_dicom_files_task_action)
+        segment_muscle_fat_l3_tensorflow_task_action = QAction('Segment muscle and fat L3 (TensorFlow)', self)
+        segment_muscle_fat_l3_tensorflow_task_action.triggered.connect(self.handle_segment_muscle_fat_l3_tensorflow_task_action)
+        create_pngs_from_segmentations_task_action = QAction('Create PNG images from segmentation masks', self)
+        create_pngs_from_segmentations_task_action.triggered.connect(self.handle_create_pngs_from_segmentations_task_action)
+        calculate_scores_task_action = QAction('Calculate body composition scores', self)
+        calculate_scores_task_action.triggered.connect(self.handle_calculate_scores_task_action)
         tasks_menu = self.menuBar().addMenu('Tasks')
         tasks_menu.addAction(decompress_dicom_files_task_action)
         tasks_menu.addAction(rescale_dicom_files_task_action)
+        tasks_menu.addAction(segment_muscle_fat_l3_tensorflow_task_action)
+        tasks_menu.addAction(create_pngs_from_segmentations_task_action)
+        tasks_menu.addAction(calculate_scores_task_action)
 
     def init_pipelines_menu(self):
         default_pipeline_action = QAction('Default pipeline', self)
@@ -139,8 +154,11 @@ class MainWindow(QMainWindow):
             self._main_panel = MainPanel(self)
             self._main_panel.add_panel(self.data_panel(), 'datapanel')
             self._main_panel.add_panel(self.settings_panel(), 'settingspanel')
-            self._main_panel.add_panel(self.decompress_dicom_files_task_panel(), 'decompressdicomfilespanel')
-            self._main_panel.add_panel(self.rescale_dicom_files_task_panel(), 'rescaledicomfilespanel')
+            self._main_panel.add_panel(self.decompress_dicom_files_task_panel(), 'decompressdicomfilestaskpanel')
+            self._main_panel.add_panel(self.rescale_dicom_files_task_panel(), 'rescaledicomfilestaskpanel')
+            self._main_panel.add_panel(self.segment_muscle_fat_l3_tensorflow_task_panel(), 'segmentmusclefatl3tensorflowtaskpanel')
+            self._main_panel.add_panel(self.create_pngs_from_segmentations_task_panel(), 'createpngsfromsegmentationstaskpanel')
+            self._main_panel.add_panel(self.calculate_scores_task_panel(), 'calculatescorestaskpanel')
             self._main_panel.add_panel(self.default_pipeline_panel(), 'defaultpipelinepanel')
             self._main_panel.select_panel('settingspanel')
         return self._main_panel
@@ -173,6 +191,21 @@ class MainWindow(QMainWindow):
         if not self._rescale_dicom_files_task_panel:
             self._rescale_dicom_files_task_panel = RescaleDicomFilesTaskPanel()
         return self._rescale_dicom_files_task_panel
+    
+    def segment_muscle_fat_l3_tensorflow_task_panel(self):
+        if not self._segment_muscle_fat_l3_tensorflow_task_panel:
+            self._segment_muscle_fat_l3_tensorflow_task_panel = SegmentMuscleFatL3TensorFlowTaskPanel()
+        return self._segment_muscle_fat_l3_tensorflow_task_panel
+
+    def create_pngs_from_segmentations_task_panel(self):
+        if not self._create_pngs_from_segmentations_task_panel:
+            self._create_pngs_from_segmentations_task_panel = CreatePngsFromSegmentationsTaskPanel()
+        return self._create_pngs_from_segmentations_task_panel
+    
+    def calculate_scores_task_panel(self):
+        if not self._calculate_scores_task_panel:
+            self._calculate_scores_task_panel = CalculateScoresTaskPanel()
+        return self._calculate_scores_task_panel
     
     def default_pipeline_panel(self):
         if not self._default_pipeline_panel:
@@ -221,10 +254,19 @@ class MainWindow(QMainWindow):
         pass
 
     def handle_decompress_dicom_files_task_action(self):
-        self.main_panel().select_panel('decompressdicomfilespanel')
+        self.main_panel().select_panel('decompressdicomfilestaskpanel')
 
     def handle_rescale_dicom_files_task_action(self):
-        self.main_panel().select_panel('rescaledicomfilespanel')
+        self.main_panel().select_panel('rescaledicomfilestaskpanel')
+
+    def handle_segment_muscle_fat_l3_tensorflow_task_action(self):
+        self.main_panel().select_panel('segmentmusclefatl3tensorflowtaskpanel')
+
+    def handle_create_pngs_from_segmentations_task_action(self):
+        self.main_panel().select_panel('createpngsfromsegmentationstaskpanel')
+
+    def handle_calculate_scores_task_action(self):
+        self.main_panel().select_panel('calculatescorestaskpanel')
 
     def handle_default_pipeline_action(self):
         self.main_panel().select_panel('defaultpipelinepanel')
@@ -237,6 +279,9 @@ class MainWindow(QMainWindow):
         # Save inputs and parameters of relevant panels
         self.decompress_dicom_files_task_panel().save_inputs_and_parameters()
         self.rescale_dicom_files_task_panel().save_inputs_and_parameters()
+        self.segment_muscle_fat_l3_tensorflow_task_panel().save_inputs_and_parameters()
+        self.create_pngs_from_segmentations_task_panel().save_inputs_and_parameters()
+        self.calculate_scores_task_panel().save_inputs_and_parameters()
         self.default_pipeline_panel().save_inputs_and_parameters()
         # Save data manager objects
         self.settings().set('mainwindow/data_objets', self.data_manager().save_data_to_file())

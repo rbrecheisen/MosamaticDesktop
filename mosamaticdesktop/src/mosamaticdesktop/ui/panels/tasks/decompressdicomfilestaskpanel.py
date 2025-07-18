@@ -26,7 +26,7 @@ from mosamatic.tasks import DecompressDicomFilesTask
 LOG = LogManager()
 
 PANEL_TITLE = 'Decompress DICOM files'
-PANEL_NAME = 'decompressdicomfiles'
+PANEL_NAME = 'decompressdicomfilestaskpanel'
 
 
 class DecompressDicomFilesTaskPanel(TaskPanel):
@@ -84,7 +84,6 @@ class DecompressDicomFilesTaskPanel(TaskPanel):
     def run_task_button(self):
         if not self._run_task_button:
             self._run_task_button = QPushButton('Run task')
-            # self._run_task_button.setStyleSheet('color: white; background-color: blue; font-weight: bold;')
             self._run_task_button.clicked.connect(self.handle_run_task_button)
         return self._run_task_button
     
@@ -172,11 +171,11 @@ class DecompressDicomFilesTaskPanel(TaskPanel):
         errors = []
         if self.images_dir_line_edit().text() == '':
             errors.append('Empty images directory path')
-        elif not os.path.isdir(self.images_dir_line_edit().text()):
+        if not os.path.isdir(self.images_dir_line_edit().text()):
             errors.append('Images directory does not exist')
         if self.output_dir_line_edit().text() == '':
             errors.append('Empty output directory path')
-        elif os.path.isdir(self.output_dir_line_edit().text()) and not self.overwrite_checkbox().isChecked():
+        if os.path.isdir(self.output_dir_line_edit().text()) and not self.overwrite_checkbox().isChecked():
             errors.append('Output directory exists but overwrite=False. Please remove output directory first')
         return errors
     
