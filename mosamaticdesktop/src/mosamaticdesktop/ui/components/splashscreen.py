@@ -64,8 +64,9 @@ class SplashScreen(QWidget):
     
     def sub_text_label(self):
         if not self._sub_text_label:
-            self._sub_text_label = QLabel('(This software is for research only)')
-            self._sub_text_label.setStyleSheet('color: rgb(64, 64, 64); font-style: italic; font-size: 14pt;')
+            message = 'This software is for research only'
+            self._sub_text_label = QLabel(message)
+            self._sub_text_label.setStyleSheet('color: rgb(64, 64, 64); font-style: italic; font-size: 10pt;')
             self._sub_text_label.setAlignment(Qt.AlignCenter)
         return self._sub_text_label
     

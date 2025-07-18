@@ -152,7 +152,6 @@ class DefaultPipelinePanel(DefaultPanel):
     def run_pipeline_button(self):
         if not self._run_pipeline_button:
             self._run_pipeline_button = QPushButton('Run pipeline')
-            # self._run_pipeline_button.setStyleSheet('color: white; background-color: blue; font-weight: bold;')
             self._run_pipeline_button.clicked.connect(self.handle_run_pipeline_button)
         return self._run_pipeline_button
     
@@ -177,12 +176,12 @@ class DefaultPipelinePanel(DefaultPanel):
         self.form_layout().addRow('Images directory', images_dir_layout)
         self.form_layout().addRow('Model files directory', model_files_dir_layout)
         self.form_layout().addRow('Output directory', output_dir_layout)
-        self.form_layout().addRow('Rescale target size', self.target_size_spinbox())
-        self.form_layout().addRow('Model type', self.model_type_combobox())
-        self.form_layout().addRow('Model version', self.model_version_combobox())
-        self.form_layout().addRow('PNG figure width', self.fig_width_spinbox())
-        self.form_layout().addRow('PNG figure height', self.fig_height_spinbox())
-        self.form_layout().addRow('Full scan', self.full_scan_checkbox())
+        # self.form_layout().addRow('Rescale target size', self.target_size_spinbox())
+        # self.form_layout().addRow('Model type', self.model_type_combobox())
+        # self.form_layout().addRow('Model version', self.model_version_combobox())
+        # self.form_layout().addRow('PNG figure width', self.fig_width_spinbox())
+        # self.form_layout().addRow('PNG figure height', self.fig_height_spinbox())
+        # self.form_layout().addRow('Full scan', self.full_scan_checkbox())
         self.form_layout().addRow('Overwrite', self.overwrite_checkbox())
         layout = QVBoxLayout()
         layout.addLayout(self.form_layout())
@@ -238,12 +237,18 @@ class DefaultPipelinePanel(DefaultPanel):
                 images_dir=self.images_dir_line_edit().text(),
                 model_files_dir=self.model_files_dir_line_edit().text(),
                 output_dir=self.output_dir_line_edit().text(),
-                model_type=self.model_type_combobox().currentText(),
-                model_version=self.model_version_combobox().currentText(),
-                target_size=self.target_size_spinbox().value(),
-                fig_width=self.fig_width_spinbox().value(),
-                fig_height=self.fig_height_spinbox().value(),
-                full_scan=self.full_scan_checkbox().isChecked(),
+                model_type='tensorflow',
+                model_version='1.0',
+                target_size=512,
+                fig_width=10,
+                fig_height=10,
+                full_scan=False,
+                # model_type=self.model_type_combobox().currentText(),
+                # model_version=self.model_version_combobox().currentText(),
+                # target_size=self.target_size_spinbox().value(),
+                # fig_width=self.fig_width_spinbox().value(),
+                # fig_height=self.fig_height_spinbox().value(),
+                # full_scan=self.full_scan_checkbox().isChecked(),
                 overwrite=self.overwrite_checkbox().isChecked(),
             )
             # self._task.run()
@@ -285,20 +290,20 @@ class DefaultPipelinePanel(DefaultPanel):
             errors.append('Empty output directory path')
         elif os.path.isdir(self.output_dir_line_edit().text()) and not self.overwrite_checkbox().isChecked():
             errors.append('Output directory exists but overwrite=False. Please remove output directory first')
-        if self.target_size_spinbox().value() != 512:
-            errors.append('Target size must be 512')
-        if self.full_scan_checkbox().isChecked():
-            errors.append('Full scan support is not available yet')
+        # if self.target_size_spinbox().value() != 512:
+        #     errors.append('Target size must be 512')
+        # if self.full_scan_checkbox().isChecked():
+        #     errors.append('Full scan support is not available yet')
         return errors
     
     def save_inputs_and_parameters(self):
         self.settings().set(f'{PANEL_NAME}/images_dir', self.images_dir_line_edit().text())
         self.settings().set(f'{PANEL_NAME}/model_files_dir', self.model_files_dir_line_edit().text())
         self.settings().set(f'{PANEL_NAME}/output_dir', self.output_dir_line_edit().text())
-        self.settings().set(f'{PANEL_NAME}/target_size', self.target_size_spinbox().value())
-        self.settings().set(f'{PANEL_NAME}/model_type', self.model_type_combobox().currentText())
-        self.settings().set(f'{PANEL_NAME}/model_version', self.model_version_combobox().currentText())
-        self.settings().set(f'{PANEL_NAME}/fig_width', self.fig_width_spinbox().value())
-        self.settings().set(f'{PANEL_NAME}/fig_height', self.fig_height_spinbox().value())
-        self.settings().set(f'{PANEL_NAME}/full_scan', self.full_scan_checkbox().isChecked())
+        # self.settings().set(f'{PANEL_NAME}/target_size', self.target_size_spinbox().value())
+        # self.settings().set(f'{PANEL_NAME}/model_type', self.model_type_combobox().currentText())
+        # self.settings().set(f'{PANEL_NAME}/model_version', self.model_version_combobox().currentText())
+        # self.settings().set(f'{PANEL_NAME}/fig_width', self.fig_width_spinbox().value())
+        # self.settings().set(f'{PANEL_NAME}/fig_height', self.fig_height_spinbox().value())
+        # self.settings().set(f'{PANEL_NAME}/full_scan', self.full_scan_checkbox().isChecked())
         self.settings().set(f'{PANEL_NAME}/overwrite', self.overwrite_checkbox().isChecked())
