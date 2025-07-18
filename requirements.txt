@@ -3,6 +3,7 @@ briefcase
 tomli
 tomli_w
 pytest
+pyenv
 
 # Application
 PySide6-Essentials>=6.9
