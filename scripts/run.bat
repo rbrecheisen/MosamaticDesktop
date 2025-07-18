@@ -6,6 +6,8 @@ set /p VERSION=<mosamaticdesktop\src\mosamaticdesktop\resources\VERSION
 
 set START_DIR=%CD%
 
+set /p BRIEFCASE=<which briefcase
+
 if /I "%~1"=="" (
 
     cd mosamaticdesktop

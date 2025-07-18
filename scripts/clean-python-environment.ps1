@@ -1,0 +1,1 @@
+python -m pip freeze | % {python -m pip uninstall -y $_}

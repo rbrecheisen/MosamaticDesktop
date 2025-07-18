@@ -10,14 +10,13 @@ mkdir %OUTPUT_DIR% 2>nul
 robocopy mosamaticdesktop %OUTPUT_DIR% /E /XD __pycache__ *.dist-info .pytest_cache build dist logs /XF .gitignore CHANGELOG
 
 copy requirements.txt %OUTPUT_DIR%
-copy scripts\install-pyenv-win.ps1 %OUTPUT_DIR%
-copy scripts\install-pyenv.bat %OUTPUT_DIR%
-copy scripts\install-mosamaticdesktop.bat %OUTPUT_DIR%
-copy scripts\run.bat %OUTPUT_DIR%
+copy scripts\clean-python-environment.bat %OUTPUT_DIR%
+copy scripts\clean-python-environment.ps1 %OUTPUT_DIR%
+copy scripts\run-mosamaticdesktop.bat %OUTPUT_DIR%
 
-cd %OUTPUT_DIR%
-dir
+powershell -Command "Compress-Archive -Path '%OUTPUT_DIR%' -DestinationPath '%OUTPUT_DIR%\..\MosamaticDesktop.zip' -Force"
 
+echo Created ZIP archive: %OUTPUT_DIR%\..\MosamaticDesktop.zip
 echo Finished
 
 endlocal
