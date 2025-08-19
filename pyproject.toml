@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mosamaticdesktop"
-version = "1.0.1"
+version = "1.0.2"
 description = "Desktop application for analyzing body composition in CT images (Windows version)"
 authors = ["Ralph Brecheisen <ralph.brecheisen@gmail.com>"]
 license = "MIT"
