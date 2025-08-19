@@ -1,8 +1,4 @@
 poetry
-
-briefcase
-tomli
-tomli_w
 pytest
 
 PySide6-Essentials>=6.9
