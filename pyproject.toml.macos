@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mosamaticdesktop-macos"
-version = "1.0.1"
+version = "2.0.0"
 description = "Desktop application for analyzing body composition in CT images (MacOS version)"
 authors = ["Ralph Brecheisen <ralph.brecheisen@gmail.com>"]
 license = "MIT"
