@@ -54,7 +54,7 @@ class SettingsPanel(DefaultPanel):
                 if isinstance(value, str) or isinstance(value, int) or isinstance(value, bool) or isinstance(value, float):
                     self._settings_table_widget.setItem(row_index, 1, QTableWidgetItem(str(value)))
                 else:
-                    self._settings_table_widget.setItem(row_index, 1, QTableWidgetItem('Cannot diaplay (binary data)'))
+                    self._settings_table_widget.setItem(row_index, 1, QTableWidgetItem('Cannot display (binary data)'))
                 row_index += 1
             self._settings_table_widget.resizeColumnsToContents()
             self._settings_table_widget.sortItems(0, Qt.AscendingOrder)
