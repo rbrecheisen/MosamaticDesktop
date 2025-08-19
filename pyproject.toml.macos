@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "mosamaticdesktop-macos"
+version = "1.0.0"
+description = "Desktop application for analyzing body composition in CT images (MacOS version)"
+authors = ["Ralph Brecheisen <ralph.brecheisen@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [
+    { include = "mosamaticdesktop", from = "." },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.12"
+
+[tool.poetry.scripts]
+mosamaticdesktop = "mosamaticdesktop.app:main"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.1"
+
+[tool.pytest.ini_options]
+addopts = "-s"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
