@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mosamaticdesktop-macos"
-version = "2.0.2"
+version = "2.0.3"
 description = "Desktop application for analyzing body composition in CT images (MacOS version)"
 authors = ["Ralph Brecheisen <ralph.brecheisen@gmail.com>"]
 license = "MIT"
@@ -14,7 +14,7 @@ python = ">=3.9,<3.12"
 poetry = "^2.1.4"
 pytest = "^8.4.1"
 pyside6-essentials = ">=6.9"
-mosamatic-cli = ">=1.6"
+mosamatic-cli-macos = ">=1.6"
 click = "<8.1.8"
 pendulum = "^3.1.0"
 pandas = "^2.3.1"
