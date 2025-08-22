@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mosamaticdesktop"
-version = "2.0.3"
+version = "2.0.4"
 description = "Desktop application for analyzing body composition in CT images (Windows version)"
 authors = ["Ralph Brecheisen <ralph.brecheisen@gmail.com>"]
 license = "MIT"
@@ -17,6 +17,7 @@ pyside6-essentials = ">=6.9"
 mosamatic-cli = ">=1.6"
 click = "<8.1.8"
 pendulum = "^3.1.0"
+numpy = "^1.26.4"
 pandas = "^2.3.1"
 openpyxl = "^3.1.5"
 pillow = "^11.3.0"
